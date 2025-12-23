@@ -1,0 +1,16 @@
+*.txt
+*.csv
+*.npz
+*.png
+*.pth
+__pycache__/
+*.pyc
+
+# 大型数据/输出目录
+Synthetic-UAV-Flight-Trajectories/
+new_random_traj_*/
+random_traj_*/
+transformed_trajectories/
+evaluation_results/
+validation_results*/
+drone_trajectories/visualization_output/
