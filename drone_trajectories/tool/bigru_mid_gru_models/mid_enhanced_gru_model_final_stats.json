@@ -1,0 +1,8 @@
+{
+  "best_val_loss": 0.0019938440043309317,
+  "total_epochs_trained": 291,
+  "total_time_seconds": 29779.623255491257,
+  "avg_epoch_time": 102.32991791754654,
+  "final_train_loss": 0.0021806999541838625,
+  "final_val_loss": 0.0019946358357039737
+}

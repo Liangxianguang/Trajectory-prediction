@@ -1,0 +1,34 @@
+[
+  {
+    "name": "短轨迹_单向GRU_64h",
+    "model_path": "../tool/combined_short_gru_models_enhanced/short_enhanced_gru_model_best_model.pth",
+    "stats_path": "../tool/combined_short_gru_models_enhanced/short_enhanced_gru_model_norm_stats.npz",
+    "hidden_dim": 64,
+    "num_layers": 2,
+    "bidirectional": false
+  },
+  {
+    "name": "短轨迹_双向GRU_64h",
+    "model_path": "../tool/bigru_short_gru_models/short_enhanced_gru_model_best_model.pth",
+    "stats_path": "../tool/bigru_short_gru_models/short_enhanced_gru_model_norm_stats.npz",
+    "hidden_dim": 64,
+    "num_layers": 2,
+    "bidirectional": true
+  },
+  {
+    "name": "长轨迹_单向GRU_256h",
+    "model_path": "../tool/long_gru_models_enhanced/long_enhanced_gru_model_best_model.pth",
+    "stats_path": "../tool/long_gru_models_enhanced/long_enhanced_gru_model_norm_stats.npz",
+    "hidden_dim": 256,
+    "num_layers": 5,
+    "bidirectional": false
+  },
+  {
+    "name": "标准GRU_128h",
+    "model_path": "../tool/gru_models_enhanced/enhanced_gru_model_best_model.pth",
+    "stats_path": "../tool/gru_models_enhanced/enhanced_gru_model_norm_stats.npz",
+    "hidden_dim": 128,
+    "num_layers": 3,
+    "bidirectional": false
+  }
+]
