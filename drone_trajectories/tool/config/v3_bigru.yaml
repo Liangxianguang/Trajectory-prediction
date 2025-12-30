@@ -1,0 +1,34 @@
+# v3 BiGRU 实验配置
+# 特点：双向 GRU + 多尺度特征
+# 用途：对比评估 BiGRU 相比单向 GRU 的优势
+
+model:
+  input_size: 16
+  hidden_dim: 128
+  num_layers: 3
+  output_steps: 10
+  use_attention: false
+  bidirectional: true              # ⭐ 核心差异：启用双向 GRU
+
+features:
+  enable_multiscale_velocity: true
+  velocity_scales: [1, 2, 3]
+  enable_curvature: true
+  enable_plane_curvature: true
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  early_stopping_patience: 10
+
+data:
+  dt: 0.1
+  input_length: 20
+
+experiment:
+  name: "v3_bigru"
+  version: "v3"
+  description: "双向 GRU + 多尺度特征（对标 v1 基线）"
+  tags: [bigru, bidirectional, comparison]

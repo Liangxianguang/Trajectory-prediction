@@ -238,26 +238,15 @@ class EnhancedInference:
 
         # 构造模型并加载权重（先尝试严格加载）
         has_plane_heads = _state_dict_has_plane_heads(state_dict_stripped)
-        use_bigru_improved = has_plane_heads and EnhancedGRUModelBigruImproved is not None and bidirectional
-        if use_bigru_improved:
+        if has_plane_heads and EnhancedGRUModelBigruImproved is not None:
             ModelClass = EnhancedGRUModelBigruImproved
             logger.info("✓ 检测到 plane heads 参数，使用 BiGRU 改进版模型结构 (train_model_bigru_improved)")
         else:
             ModelClass = EnhancedGRUModelLegacy
-            if has_plane_heads:
-                if not bidirectional:
-                    logger.warning("检测到 plane heads 但 checkpoint 为单向 GRU，改用旧版模型结构以避免形状不匹配")
-                elif EnhancedGRUModelBigruImproved is None:
-                    logger.warning("检测到 plane heads 参数，但无法导入 train_model_bigru_improved，将回退到旧版模型结构，预测可能会变差")
+            if has_plane_heads and EnhancedGRUModelBigruImproved is None:
+                logger.warning("检测到 plane heads 参数，但无法导入 train_model_bigru_improved，将回退到旧版模型结构，预测可能会变差")
 
         logger.info(f"构造模型: input_size={input_size}, hidden_dim={hidden_dim}, num_layers={num_layers}, bidirectional={bidirectional}, encoder_input_dim={inferred_encoder_input_dim}")
-        
-        # ✅ 关键信息：显示 cross-attention 状态
-        if use_attention:
-            logger.info(f"✓ Cross-Attention 已启用：解码器将在每个时步查询全部编码器输出，充分利用{'双向' if bidirectional else '单向'}编码")
-        else:
-            logger.info(f"⊘ Cross-Attention 未启用：模型使用普通 GRU 解码，可考虑添加 --use_attention 来启用")
-        
         self.model = ModelClass(
             input_size=input_size,
             hidden_dim=hidden_dim,
@@ -307,6 +296,15 @@ class EnhancedInference:
                 raise
 
         self.model.eval()
+
+        # 仅对双向 GRU 启用 cross-attention 推理，避免单向模型误用
+        self.cross_attention_active = (
+            self.model.use_attention and getattr(self.model, 'num_directions', 1) == 2
+        )
+        if self.model.use_attention and not self.cross_attention_active:
+            logger.warning(
+                "模型含有注意力模块但当前为单向 GRU，cross-attention 推理将被跳过。"
+            )
 
         # 加载统计量（保持原有逻辑）
         logger.info(f"加载统计量: {Path(stats_path).name}")
@@ -486,7 +484,12 @@ class EnhancedInference:
     
     def predict_delta_increments(self, input_positions, input_length=20, verbose=False):
         """
-        预测位置增量（改进版）
+        预测位置增量（改进版 - 充分利用 Cross-Attention）
+        
+        ⭐ 关键改进：
+        - 显式调用编码器获取双向编码输出
+        - 解码时通过 cross-attention 查询编码器全部时刻
+        - 每个解码步都能访问完整的双向上下文
         
         Args:
             input_positions: 输入轨迹
@@ -514,26 +517,97 @@ class EnhancedInference:
                 pad = np.zeros((features.shape[0], expected_C - features.shape[1]), dtype=features.dtype)
                 features = np.concatenate([features, pad], axis=1)
 
-        features_tensor = torch.from_numpy(features).unsqueeze(0).to(self.device)
+        features_tensor = torch.from_numpy(features).unsqueeze(0).to(self.device)  # (1, T, C)
         
-        # 推理
+        # ⭐ 关键改进：显式推理流程，充分利用 cross-attention
         with torch.no_grad():
-            pred_delta_norm = self.model(features_tensor)
+            # 如果是新版 BiGRU 改进模型（含 plane heads/gate），直接走模型 forward
+            # 这样可以完整复现训练时的 plane-fusion + gate 逻辑，避免评估时性能异常下滑。
+            if hasattr(self.model, 'plane_heads') and hasattr(self.model, 'plane_gate'):
+                if verbose:
+                    logger.info('\n[推理路径选择] 检测到 plane_heads/plane_gate，使用 model.forward 进行推理（包含 plane-fusion + gate）')
+                pred_delta_norm_t = self.model(features_tensor)  # (1, T_out, 3)
+                pred_delta_norm = pred_delta_norm_t.squeeze(0).cpu().numpy()
+            else:
+                # 第1步：特征融合
+                x_fused = self.model.feature_fusion(features_tensor)  # (1, T, encoder_input_dim)
+            
+                # 第2步：编码（双向 GRU）
+                encoder_out, encoder_hidden = self.model.encoder_gru(x_fused)
+                # encoder_out: (1, T, hidden_dim*2) - 每个时刻都包含完整的前向和反向信息
+                # encoder_hidden: (num_layers*2, 1, hidden_dim)
+            
+                if verbose:
+                    logger.info(f"\n[Cross-Attention 推理诊断]")
+                    logger.info(f"  ✓ 编码器输出形状: {encoder_out.shape}")
+                    logger.info(f"    - 批次: 1")
+                    logger.info(f"    - 序列长度: {encoder_out.shape[1]} (输入长度)")
+                    logger.info(f"    - 双向维度: {encoder_out.shape[2]} (hidden_dim * 2)")
+                    logger.info(f"  ✓ 编码器是双向的: {self.model.num_directions == 2}")
+                    logger.info(f"  ✓ 解码器将查询编码器的全部 {encoder_out.shape[1]} 个时刻信息")
+            
+                # 第3步：如果启用了 attention，进行编码器精化
+                if self.model.use_attention and hasattr(self.model, 'pos_enc'):
+                    encoder_out = self.model.pos_enc(encoder_out)
+                    encoder_out = self.model.enc_refiner(encoder_out)
+                    if verbose:
+                        logger.info(f"  ✓ 编码器已精化: 应用了位置编码和 self-attention")
+            
+                # 第4步：合并编码隐藏状态
+                encoder_hidden_merged = self.model._merge_bidirectional_hidden(encoder_hidden)
+            
+                # 第5步：自回归解码（每步都通过 cross-attention 查询编码器）
+                predictions = []
+                h_t = encoder_hidden_merged
+            
+                # 初始化：使用编码器最后一个时刻通过 cross-attention 获取初始输出
+                if self.cross_attention_active and hasattr(self.model, 'cross_attn'):
+                    q0 = encoder_out[:, -1:, :]  # (1, 1, hidden_dim*2)
+                    ctx0, _ = self.model.cross_attn(q0, encoder_out, encoder_out, need_weights=False)
+                    ctx0 = self.model.cross_ln(q0 + ctx0).squeeze(1)  # (1, hidden_dim*2)
+                    prev_output = self.model.fc(ctx0)  # (1, 3)
+                else:
+                    last_output = encoder_out[:, -1, :]  # (1, hidden_dim*2)
+                    prev_output = self.model.fc(last_output)  # (1, 3)
+            
+                # 自回归循环：每步都通过 cross-attention 重新查询编码器
+                for step in range(self.model.output_steps):
+                    # 准备解码器输入
+                    decoder_input = self.model.decoder_input_proj(prev_output).unsqueeze(1)  # (1, 1, hidden_dim)
+                
+                    # GRU 解码一步
+                    _, h_t = self.model.decoder_gru(decoder_input, h_t)
+                    h_last = h_t[-1]  # (1, hidden_dim)
+                
+                    # ⭐ 关键：Cross-Attention 让解码器查询编码器的全部时刻
+                    if self.cross_attention_active and hasattr(self.model, 'cross_attn'):
+                        q = h_last.unsqueeze(1)  # (1, 1, hidden_dim)
+                        ctx, _ = self.model.cross_attn(q, encoder_out, encoder_out, need_weights=False)
+                        ctx = self.model.cross_ln(q + ctx).squeeze(1)  # (1, hidden_dim)
+                        step_output = self.model.fc(ctx)  # (1, 3)
+                        if verbose and step == 0:
+                            logger.info(f"  ✓ 第 1 步解码: 通过 cross-attention 查询编码器全部 {encoder_out.shape[1]} 个时刻")
+                    else:
+                        step_output = self.model.fc(h_last)  # (1, 3)
+                
+                    predictions.append(step_output)
+                    prev_output = step_output
+            
+                # 拼接预测
+                pred_delta_norm = torch.cat(predictions, dim=0)  # (10, 3)
+                pred_delta_norm = pred_delta_norm.cpu().numpy()
+            
+                if verbose:
+                    logger.info(f"  ✓ 解码完成: 生成了 {len(predictions)} 步预测")
+                    logger.info(f"    每一步都充分利用了编码器的双向上下文信息")
         
-        pred_delta_norm = pred_delta_norm[0].cpu().numpy()
-        
-        # ⭐ 改进：添加反归一化诊断信息
+        # ⭐ 反归一化：pred_delta_norm -> pred_delta
         if verbose:
             logger.info(f"\n[反归一化诊断]")
             logger.info(f"  归一化后的预测 (pred_delta_norm):")
             logger.info(f"    范围: [{pred_delta_norm.min():.6f}, {pred_delta_norm.max():.6f}]")
             logger.info(f"    均值: {pred_delta_norm.mean():.6f}")
-            logger.info(f"  output_mean: {self.output_mean}")
-            logger.info(f"  output_std:  {self.output_std}")
         
-        # ✨ 反归一化：pred_delta_norm -> pred_delta
-        # 训练时：pred_delta = (out_target - out_mean) / out_std
-        # 推理时：pred_delta = pred_delta_norm * out_std + out_mean
         pred_delta = pred_delta_norm * self.output_std + self.output_mean
         
         if verbose:

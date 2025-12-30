@@ -1,0 +1,33 @@
+# 消融实验 1：移除多尺度速度特征
+# 用途：评估多尺度速度特征的贡献度
+
+model:
+  input_size: 7                    # 3D位置 + 1D曲率 + 3D平面曲率 = 7（移除9D多尺度速度）
+  hidden_dim: 128
+  num_layers: 3
+  output_steps: 10
+  use_attention: false
+  bidirectional: true
+
+features:
+  enable_multiscale_velocity: false    # ⭐ 移除该特征
+  velocity_scales: []
+  enable_curvature: true
+  enable_plane_curvature: true
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  early_stopping_patience: 10
+
+data:
+  dt: 0.1
+  input_length: 20
+
+experiment:
+  name: "ablate_multiscale_velocity"
+  version: "ablate_v1"
+  description: "移除多尺度速度特征，评估其贡献度"
+  tags: [ablation, multiscale_velocity]

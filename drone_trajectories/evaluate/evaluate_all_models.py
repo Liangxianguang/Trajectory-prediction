@@ -20,13 +20,14 @@ from pathlib import Path
 from datetime import datetime
 import json
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from drone_trajectories.tool.train_model_enhanced import EnhancedGRUModel
-from drone_trajectories.tool.infer_enhanced import EnhancedInference
+# 直接使用 infer_enhanced 的推理器
+from drone_trajectories.tool.infer_enhanced import EnhancedInference as GenericInference
+from drone_trajectories.tool.train_bigru_enhanced import EnhancedInference as BigruInference
 try:
     # 用于可视化（可选），如果不存在则继续不阻塞评估
     from drone_trajectories.tool.visualize_prediction import plot_prediction
@@ -78,6 +79,49 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] %(m
 logger = logging.getLogger(__name__)
 
 
+def _load_checkpoint_state(model_path: str) -> dict:
+    ckpt = torch.load(model_path, map_location='cpu')
+    if isinstance(ckpt, dict) and ('model_state_dict' in ckpt or 'state_dict' in ckpt):
+        return ckpt.get('model_state_dict', ckpt.get('state_dict', ckpt))
+    return ckpt
+
+
+def _is_bidirectional_model(state_dict: dict) -> bool:
+    """
+    多重检测策略来判断是否为双向 GRU
+    优先级：1) encoder_gru.weight_ih_l0_reverse  2) 输出维度推断  3) encoder_gru 中的其他 _reverse 权重
+    """
+    keys = list(state_dict.keys())
+    
+    # 方法1：检查 encoder_gru 的 l0_reverse 权重（最可靠）
+    if 'encoder_gru.weight_ih_l0_reverse' in state_dict:
+        return True
+    
+    # 方法2：从输出维度推断
+    feature_fusion_weight = state_dict.get('feature_fusion.weight')
+    encoder_hidden_dim = None
+    
+    # 尝试从 GRU 权重推断 hidden_dim
+    enc_weight = state_dict.get('encoder_gru.weight_ih_l0')
+    if enc_weight is not None:
+        encoder_hidden_dim = enc_weight.shape[0] // 3
+    
+    if feature_fusion_weight is not None and encoder_hidden_dim is not None:
+        encoder_output_dim = feature_fusion_weight.shape[0]
+        # 如果输出维度 = hidden_dim*2，则可能是双向
+        if encoder_output_dim == encoder_hidden_dim * 2:
+            return True
+    
+    # 方法3：检查 encoder_gru 中是否有其他 _reverse 权重（不太可靠，但作备选）
+    if any('encoder_gru.' in k and '_reverse' in k for k in keys):
+        return True
+    
+    return False
+
+
+InferenceEngine = Union[GenericInference, BigruInference]
+
+
 class UnifiedEvaluator:
     """统一评估器"""
     
@@ -87,7 +131,7 @@ class UnifiedEvaluator:
         
     def load_model(self, model_path: str, stats_path: str, model_name: str,
                    hidden_dim=None, num_layers=None, use_attention=False,
-                   bidirectional=False) -> Tuple[EnhancedInference, str]:
+                   bidirectional=False) -> Tuple[InferenceEngine, str]:
         """
         加载单个模型和统计量
         
@@ -96,17 +140,19 @@ class UnifiedEvaluator:
         """
         try:
             logger.info(f"加载模型: {model_name}")
-            
-            # 直接传递参数到 EnhancedInference
-            # 推理代码会自动从 checkpoint 推断，传入的值如果与 checkpoint 不符会被覆盖
-            infer = EnhancedInference(
+
+            state_dict = _load_checkpoint_state(model_path)
+            is_bigru = _is_bidirectional_model(state_dict)
+            InferClass = BigruInference if is_bigru else GenericInference
+
+            infer = InferClass(
                 model_path, stats_path,
                 hidden_dim=hidden_dim,
                 num_layers=num_layers,
                 use_attention=use_attention,
                 device=self.device
             )
-            logger.info(f"  ✓ {model_name} 加载成功")
+            logger.info(f"  ✓ {model_name} 加载成功 ({'BiGRU' if is_bigru else 'standard'} 推理路径)")
             return infer, None
         except Exception as e:
             error_msg = f"加载模型 {model_name} 失败: {str(e)}"
@@ -208,7 +254,7 @@ class UnifiedEvaluator:
             import traceback
             return None, f"加载轨迹失败: {str(e)}\n{traceback.format_exc()}"
     
-    def predict_trajectory(self, infer: EnhancedInference, trajectory: np.ndarray,
+    def predict_trajectory(self, infer: InferenceEngine, trajectory: np.ndarray,
                           input_length: int = 20, method: str = 'physics_constrained') -> Tuple[np.ndarray, str]:
         """预测轨迹 - 调用 EnhancedInference 的重建方法（复用现有推理 API）"""
         try:
@@ -279,7 +325,168 @@ class UnifiedEvaluator:
         
         return metrics
     
-    def evaluate_model_on_dataset(self, infer: EnhancedInference, model_name: str,
+    def evaluate_model_on_combined_dataset(self, infer: InferenceEngine, model_name: str,
+                                         traj_files: List[Path], input_length: int = 20,
+                                         method: str = 'physics_constrained',
+                                         max_samples: int = None,
+                                         visualize: bool = False,
+                                         visual_samples: int = 0,
+                                         visual_output_dir: str = None) -> Tuple[Dict, pd.DataFrame]:
+        """
+        在综合数据集（多个目录合并）上评估单个模型
+        
+        Args:
+            infer: 推理器
+            model_name: 模型名称
+            traj_files: 所有轨迹文件路径列表
+            input_length: 输入序列长度
+            method: 重建方法
+            max_samples: 最多评估样本数（None 表示全部）
+        
+        Returns:
+            summary, metrics_df: 汇总统计和详细结果
+        """
+        logger.info(f"\n{'='*80}")
+        logger.info(f"评估模型: {model_name}")
+        logger.info(f"综合测试集: {len(traj_files)} 个轨迹文件")
+        logger.info(f"{'='*80}")
+        
+        if not traj_files:
+            logger.error(f"轨迹文件列表为空")
+            return None, None
+        
+        if max_samples:
+            traj_files = traj_files[:max_samples]
+        
+        logger.info(f"实际评估文件数: {len(traj_files)}")
+        
+        all_metrics = []
+        errors = []
+        
+        # 调试：统计各类错误
+        load_errors = {}
+        pred_errors = {}
+        visuals_done = 0
+        if visualize and not PLOT_AVAILABLE:
+            logger.warning("请求可视化，但 plot_prediction 不可用（无法导入 visualize_prediction），将跳过可视化。")
+        
+        for i, traj_file in enumerate(traj_files, 1):
+            traj_name = traj_file.stem if isinstance(traj_file, Path) else Path(traj_file).stem
+            
+            # 加载真实轨迹
+            trajectory, load_err = self.load_trajectory(str(traj_file))
+            if load_err:
+                logger.debug(f"  [{i}/{len(traj_files)}] {traj_name}: {load_err}")
+                # 统计加载错误类型
+                if load_err not in load_errors:
+                    load_errors[load_err] = 0
+                load_errors[load_err] += 1
+                errors.append((traj_name, load_err))
+                continue
+            
+            logger.debug(f"  [{i}/{len(traj_files)}] {traj_name}: 成功加载，形状 {trajectory.shape}")
+            
+            # 截断/补齐输入部分（前 input_length 点 + 后续待预测部分）
+            if len(trajectory) <= input_length:
+                logger.debug(f"  [{i}/{len(traj_files)}] {traj_name}: 轨迹过短 (len={len(trajectory)} <= input_length={input_length})，跳过")
+                continue
+            
+            # 分割：前 input_length 作为输入，后续作为预测目标
+            input_traj = trajectory[:input_length]
+            true_future = trajectory[input_length:]
+            
+            # 限制预测长度（通常预测 10 步）
+            max_pred_steps = min(10, len(true_future))
+            true_future = true_future[:max_pred_steps]
+            
+            # 预测
+            pred, pred_err = self.predict_trajectory(infer, input_traj, input_length, method)
+            if pred_err:
+                logger.debug(f"  [{i}/{len(traj_files)}] {traj_name}: {pred_err}")
+                # 统计预测错误类型
+                if pred_err not in pred_errors:
+                    pred_errors[pred_err] = 0
+                pred_errors[pred_err] += 1
+                errors.append((traj_name, pred_err))
+                continue
+            
+            # 截断预测到与真实相同长度
+            pred = pred[:len(true_future)]
+            
+            # 计算指标
+            metrics = self.compute_metrics(pred, true_future)
+            if not metrics:
+                logger.debug(f"  [{i}/{len(traj_files)}] {traj_name}: 指标计算失败")
+                continue
+
+            # 可选可视化（只对前 visual_samples 个样本）
+            if visualize and visuals_done < visual_samples and PLOT_AVAILABLE:
+                try:
+                    out_dir = Path(visual_output_dir) if visual_output_dir is not None else Path.cwd()
+                    out_dir.mkdir(parents=True, exist_ok=True)
+                    png_path, html_path = plot_prediction(input_traj, true_future, pred, traj_name, out_dir, interactive=False)
+                    logger.info(f"  [{i}/{len(traj_files)}] 可视化已保存: {png_path} {html_path if html_path else ''}")
+                    visuals_done += 1
+                except Exception as e:
+                    logger.warning(f"可视化失败: {e}")
+            
+            metrics['trajectory'] = traj_name
+            metrics['input_length'] = len(input_traj)
+            metrics['pred_length'] = len(pred)
+            all_metrics.append(metrics)
+            
+            if i % 100 == 0:
+                logger.info(f"  已处理 {i}/{len(traj_files)} 个文件...")
+        
+        logger.info(f"加载错误统计: {load_errors}")
+        logger.info(f"预测错误统计: {pred_errors}")
+        
+        # 汇总统计
+        if not all_metrics:
+            logger.error(f"模型 {model_name} 未能成功评估任何样本")
+            return None, None
+        
+        metrics_df = pd.DataFrame(all_metrics)
+        
+        summary = {
+            'model_name': model_name,
+            'num_samples': len(all_metrics),
+            'num_errors': len(errors),
+            'avg_MAE': float(metrics_df['MAE_all'].mean()),
+            'avg_MSE': float(metrics_df['MSE_all'].mean()),
+            'avg_RMSE': float(metrics_df['RMSE_all'].mean()),
+            'avg_MAPE': float(metrics_df['MAPE_all'].mean()),
+            'avg_MAE_x': float(metrics_df['MAE_x'].mean()),
+            'avg_MAE_y': float(metrics_df['MAE_y'].mean()),
+            'avg_MAE_z': float(metrics_df['MAE_z'].mean()),
+            'avg_RMSE_x': float(metrics_df['RMSE_x'].mean()),
+            'avg_RMSE_y': float(metrics_df['RMSE_y'].mean()),
+            'avg_RMSE_z': float(metrics_df['RMSE_z'].mean()),
+            'max_error': float(metrics_df['Max_error'].mean()),
+            'min_error': float(metrics_df['Min_error'].mean()),
+            'std_error': float(metrics_df['Std_error'].mean()),
+        }
+        
+        logger.info(f"\n[{model_name} 汇总]")
+        logger.info(f"  有效样本: {summary['num_samples']}")
+        logger.info(f"  失败样本: {summary['num_errors']}")
+        logger.info(f"  平均 MAE: {summary['avg_MAE']:.6f}")
+        logger.info(f"  平均 MSE: {summary['avg_MSE']:.6f}")
+        logger.info(f"  平均 RMSE: {summary['avg_RMSE']:.6f}")
+        logger.info(f"  平均 MAPE: {summary['avg_MAPE']:.6f}%")
+        logger.info(f"  分轴 MAE  - X: {summary['avg_MAE_x']:.6f}, Y: {summary['avg_MAE_y']:.6f}, Z: {summary['avg_MAE_z']:.6f}")
+        logger.info(f"  分轴 RMSE - X: {summary['avg_RMSE_x']:.6f}, Y: {summary['avg_RMSE_y']:.6f}, Z: {summary['avg_RMSE_z']:.6f}")
+        
+        # 保存详细结果
+        output_dir = Path(visual_output_dir) if visual_output_dir is not None else Path.cwd()
+        output_dir.mkdir(parents=True, exist_ok=True)
+        detail_path = output_dir / f'{model_name}_detailed_results.csv'
+        metrics_df.to_csv(detail_path, index=False)
+        logger.info(f"  详细结果已保存: {detail_path}")
+        
+        return summary, metrics_df
+    
+    def evaluate_model_on_dataset(self, infer: InferenceEngine, model_name: str,
                                  test_dir: str, input_length: int = 20,
                                  method: str = 'physics_constrained',
                                  max_samples: int = None,
@@ -512,8 +719,8 @@ def main():
                        help='模型配置 JSON 文件（包含模型路径、名称等）；使用 --auto_models 时可省略')
     parser.add_argument('--test_dir', type=str, required=True,
                        help='测试集目录（支持多个目录，逗号分隔；如 "dir1,dir2,dir3"）')
-    parser.add_argument('--output_dir', type=str, default='./evaluation_results',
-                       help='输出目录')
+    parser.add_argument('--output_dir', type=str, default='',
+                       help='输出目录（默认为 D:\\Trajectory prediction\\evaluation_results\\[时间戳]）')
     parser.add_argument('--input_length', type=int, default=20,
                        help='输入序列长度')
     parser.add_argument('--method', type=str, default='physics_constrained',
@@ -538,6 +745,20 @@ def main():
     
     # 处理路径：如果是相对路径，相对于当前脚本目录
     current_dir = Path(__file__).resolve().parent
+    
+    # 如果未指定输出目录，使用默认带时间戳的路径
+    if not args.output_dir:
+        base_output = Path('D:/Trajectory prediction/evaluation_results')
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        args.output_dir = str(base_output / timestamp)
+    else:
+        # 如果指定了相对路径，转换为绝对路径
+        output_path = Path(args.output_dir)
+        if not output_path.is_absolute():
+            output_path = current_dir / output_path
+        args.output_dir = str(output_path)
+    
+    logger.info(f"输出目录: {args.output_dir}")
     
     # 处理多个测试目录（支持逗号分隔）
     test_dirs_raw = args.test_dir.split(',')
@@ -624,30 +845,37 @@ def main():
             logger.error(f"跳过模型 {model_name}")
             continue
         
-        # 对每个测试目录评估模型
+        # 将所有测试目录合并为一个整体数据集
+        logger.info(f"\n{'='*80}")
+        logger.info(f"评估模型 '{model_name}' 在综合测试集上（{len(test_dirs)} 个目录）")
+        logger.info(f"测试目录：{test_dirs}")
+        logger.info(f"{'='*80}")
+        
+        # 合并所有目录的文件
+        all_test_files = []
         for test_dir in test_dirs:
-            logger.info(f"\n{'='*80}")
-            logger.info(f"评估模型 '{model_name}' 在目录 '{test_dir}' 上")
-            logger.info(f"{'='*80}")
-            
-            # 为这个测试集生成独特的模型名称（带目录标识）
-            test_dir_name = Path(test_dir).name
-            model_name_with_dataset = f"{model_name}_{test_dir_name}"
-            
-            # 评估模型
-            result = evaluator.evaluate_model_on_dataset(
-                infer, model_name_with_dataset, str(test_dir),
-                input_length=args.input_length,
-                method=args.method,
-                max_samples=args.max_samples,
-                visualize=args.visualize,
-                visual_samples=args.visual_samples,
-                visual_output_dir=(args.visual_output_dir or args.output_dir)
-            )
-            
-            if result:
-                summary, metrics_df = result
-                all_summaries.append(summary)
+            test_path = Path(test_dir)
+            if test_path.exists():
+                csv_files = list(test_path.glob('*.csv'))
+                txt_files = list(test_path.glob('*.txt'))
+                all_test_files.extend(csv_files + txt_files)
+        
+        logger.info(f"合并后的综合测试集包含 {len(all_test_files)} 个轨迹文件")
+        
+        # 评估模型在综合数据集上的表现
+        result = evaluator.evaluate_model_on_combined_dataset(
+            infer, model_name, all_test_files,
+            input_length=args.input_length,
+            method=args.method,
+            max_samples=args.max_samples,
+            visualize=args.visualize,
+            visual_samples=args.visual_samples,
+            visual_output_dir=(args.visual_output_dir or args.output_dir)
+        )
+        
+        if result:
+            summary, metrics_df = result
+            all_summaries.append(summary)
     
     # 对比所有模型
     if all_summaries:

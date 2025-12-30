@@ -1,3 +1,2 @@
-git add -A
-git commit -m "在可视化脚本和推理脚本中添加对注意力机制的支持"
+git commit -m "添加了bigru和对多个测试目录评估的功能"
 git push origin main

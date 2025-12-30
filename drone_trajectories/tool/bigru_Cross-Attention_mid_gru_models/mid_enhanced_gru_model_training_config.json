@@ -1,14 +1,14 @@
 {
-  "timestamp": "2025-12-24T18:16:40.943880",
+  "timestamp": "2025-12-30T02:49:50.850758",
   "epochs": 300,
   "batch_size": 2048,
   "lr": 0.001,
   "weight_decay": 1e-05,
   "grad_clip": 1.0,
-  "patience": 25,
+  "patience": 30,
   "seed": 42,
-  "hidden_dim": 256,
-  "num_layers": 5,
+  "hidden_dim": 128,
+  "num_layers": 3,
   "dropout": 0.5,
   "val_split": 0.1,
   "teacher_forcing_ratio": 0.6,
@@ -19,6 +19,8 @@
   "axis_weights": "1.0,1.1,1.2",
   "use_amp": true,
   "use_attention": true,
+  "bidirectional": true,
+  "model_type": "BiGRU + Cross-Attention",
   "data_path": "merged_segments.npz",
   "input_mean": [
     0.6314016918068469,
@@ -42,5 +44,5 @@
   ],
   "num_train_samples": 690696,
   "num_val_samples": 76744,
-  "total_params": 5073932
+  "total_params": 3200012
 }

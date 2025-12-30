@@ -1,0 +1,34 @@
+# v4 Attention 实验配置
+# 特点：双向 GRU + 注意力机制 + 多尺度特征
+# 用途：评估注意力机制对预测性能的提升
+
+model:
+  input_size: 16
+  hidden_dim: 128
+  num_layers: 3
+  output_steps: 10
+  use_attention: true              # ⭐ 核心差异：启用注意力机制
+  bidirectional: true
+
+features:
+  enable_multiscale_velocity: true
+  velocity_scales: [1, 2, 3]
+  enable_curvature: true
+  enable_plane_curvature: true
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  early_stopping_patience: 10
+
+data:
+  dt: 0.1
+  input_length: 20
+
+experiment:
+  name: "v4_attention"
+  version: "v4"
+  description: "双向 GRU + 注意力机制 + 多尺度特征（完整模型）"
+  tags: [attention, bigru, bidirectional, advanced]

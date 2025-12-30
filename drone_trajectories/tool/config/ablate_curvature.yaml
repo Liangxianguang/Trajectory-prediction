@@ -1,0 +1,33 @@
+# 消融实验 2：移除曲率特征
+# 用途：评估曲率特征的贡献度
+
+model:
+  input_size: 13                   # 3D位置 + 9D多尺度速度 + 1D曲率 (removed) + 3D平面曲率 - 曲率 = 12
+  hidden_dim: 128
+  num_layers: 3
+  output_steps: 10
+  use_attention: false
+  bidirectional: true
+
+features:
+  enable_multiscale_velocity: true
+  velocity_scales: [1, 2, 3]
+  enable_curvature: false              # ⭐ 移除该特征
+  enable_plane_curvature: true
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  early_stopping_patience: 10
+
+data:
+  dt: 0.1
+  input_length: 20
+
+experiment:
+  name: "ablate_curvature"
+  version: "ablate_v2"
+  description: "移除主曲率特征，评估其贡献度"
+  tags: [ablation, curvature]

@@ -1,18 +1,46 @@
-REM filepath: d:\Trajectory prediction\drone_trajectories\tool\run1.bat
 @echo off
-REM å¤šç›®æ ‡æŸå¤±å‡½æ•°è®­ç»ƒè„šæœ¬ - æ¢å¤æ•ˆæœå¥½çš„æŸå¤±å‡½æ•°
-cd /d "%~dp0\.."
+REM ============================================================================
+REM BiGRU + Cross-Attention ÍêÕû¶Ô±ÈÊµÑé½Å±¾
+REM ============================================================================
+REM ´Ë½Å±¾ÑµÁ·²»Í¬ÅäÖÃµÄBiGRUÄ£ĞÍ£¬ÓÃÓÚÏûÈÚºÍ¶Ô±ÈÊµÑé
+REM ============================================================================
 
 echo.
 echo ========================================
-echo å¼€å§‹è®­ç»ƒä¸­æ¨¡å‹ (Mid Model: 3x128)
+echo ¿ªÊ¼ÑµÁ·¶ÌÄ£ĞÍ (Short Model: 2x64)
 echo ========================================
-python tool\train_model_enhanced.py ^
+python tool\train_model_bigru_improved.py ^
   --data_path merged_segments.npz ^
-  --output_dir tool\bigru_mid_gru_models ^
+  --output_dir tool\bigru_Cross-Attention_short_gru_models ^
+  --model_name short_enhanced_gru_model ^
+  --epochs 300 ^
+  --batch_size 2048 ^
+  --hidden_dim 64 ^
+  --num_layers 2 ^
+  --lr 0.001 ^
+  --dropout 0.5 ^
+  --use_amp ^
+  --use_attention ^
+  --loss_alpha 0.7 ^
+  --loss_beta 0.2 ^
+  --loss_gamma 0.1 ^
+  --axis_weights "1.0,1.1,1.2" ^
+  --num_workers 0
+
+if errorlevel 1 (
+    echo ¶ÌÄ£ĞÍÑµÁ·Ê§°Ü£¡
+    pause
+    exit /b 1
+echo.
+echo ========================================
+echo ¿ªÊ¼ÑµÁ·ÖĞÄ£ĞÍ (Mid Model: 3x128)
+echo ========================================
+python tool\train_model_bigru_improved.py ^
+  --data_path merged_segments.npz ^
+  --output_dir tool\bigru_Cross-Attention_mid_gru_models ^
   --model_name mid_enhanced_gru_model ^
   --epochs 300 ^
-  --batch_size 1024 ^
+  --batch_size 2048 ^
   --hidden_dim 128 ^
   --num_layers 3 ^
   --lr 0.001 ^
@@ -26,21 +54,21 @@ python tool\train_model_enhanced.py ^
   --num_workers 0
 
 if errorlevel 1 (
-    echo ä¸­æ¨¡å‹è®­ç»ƒå¤±è´¥ï¼
+    echo ÖĞÄ£ĞÍÑµÁ·Ê§°Ü£¡
     pause
     exit /b 1
 )
 
 echo.
 echo ========================================
-echo å¼€å§‹è®­ç»ƒé•¿æ¨¡å‹ (Long Model: 5x256)
+echo ¿ªÊ¼ÑµÁ·³¤Ä£ĞÍ (Long Model: 5x256)
 echo ========================================
-python tool\train_model_enhanced.py ^
+python tool\train_model_bigru_improved.py ^
   --data_path merged_segments.npz ^
-  --output_dir tool\bigru_long_gru_models ^
+  --output_dir tool\bigru_Cross-Attention_long_gru_models ^
   --model_name long_enhanced_gru_model ^
   --epochs 300 ^
-  --batch_size 1024 ^
+  --batch_size 2048 ^
   --hidden_dim 256 ^
   --num_layers 5 ^
   --lr 0.001 ^
@@ -54,13 +82,13 @@ python tool\train_model_enhanced.py ^
   --num_workers 0
 
 if errorlevel 1 (
-    echo é•¿æ¨¡å‹è®­ç»ƒå¤±è´¥ï¼
+    echo ³¤Ä£ĞÍÑµÁ·Ê§°Ü£¡
     pause
     exit /b 1
 )
 
 echo.
 echo ========================================
-echo æ‰€æœ‰æ¨¡å‹è®­ç»ƒå®Œæˆï¼
+echo ËùÓĞÄ£ĞÍÑµÁ·Íê³É£¡
 echo ========================================
 pause
