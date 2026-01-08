@@ -1,0 +1,73 @@
+{
+  "agents_count": {
+    "3": {
+      "files": 21279,
+      "samples": 2302320,
+      "input_shape": [
+        20,
+        2302320,
+        3,
+        3
+      ],
+      "output_shape": [
+        10,
+        2302320,
+        3,
+        3
+      ]
+    },
+    "4": {
+      "files": 21279,
+      "samples": 2302320,
+      "input_shape": [
+        20,
+        2302320,
+        4,
+        3
+      ],
+      "output_shape": [
+        10,
+        2302320,
+        4,
+        3
+      ]
+    },
+    "5": {
+      "files": 21279,
+      "samples": 2302320,
+      "input_shape": [
+        20,
+        2302320,
+        5,
+        3
+      ],
+      "output_shape": [
+        10,
+        2302320,
+        5,
+        3
+      ]
+    },
+    "6": {
+      "files": 21279,
+      "samples": 2302320,
+      "input_shape": [
+        20,
+        2302320,
+        6,
+        3
+      ],
+      "output_shape": [
+        10,
+        2302320,
+        6,
+        3
+      ]
+    }
+  },
+  "samples_per_agent": {},
+  "total_samples": 9209280,
+  "seq_in": 20,
+  "seq_out": 10,
+  "stride": 1
+}

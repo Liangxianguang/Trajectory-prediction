@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-01-08T10:59:38.154147",
+  "model_path": "newdata1_swarm_models_enhanced/best_model_agents_3.pt",
+  "config": {
+    "input_size": 16,
+    "hidden_size": 128,
+    "num_layers": 3,
+    "use_attention": true
+  },
+  "num_agents": 3,
+  "num_samples_visualized": 1,
+  "sample_indices": [
+    1601262
+  ],
+  "data_statistics": {
+    "x_mean": 4.336013317108154,
+    "x_std": 22.92112159729004,
+    "output_mean": [
+      -0.014399152249097824,
+      -0.007796615827828646,
+      -0.016414573416113853
+    ],
+    "output_std": [
+      1.2365392446517944,
+      1.217154860496521,
+      1.1841639280319214
+    ]
+  },
+  "metrics": [
+    {
+      "mae": 0.20284125208854675,
+      "rmse": 0.22529380023479462,
+      "max_error": 0.33046507835388184,
+      "sample_idx": 1601262
+    }
+  ],
+  "summary": {
+    "avg_mae": 0.20284125208854675,
+    "avg_rmse": 0.22529380023479462,
+    "max_mae": 0.20284125208854675,
+    "min_mae": 0.20284125208854675
+  }
+}

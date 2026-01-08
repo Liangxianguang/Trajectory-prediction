@@ -1,0 +1,19 @@
+{
+    "timestamp": "2026-01-08T17:28:08.623503",
+    "num_agents": 3,
+    "epochs": 300,
+    "batch_size": 1024,
+    "learning_rate": 0.0002,
+    "weight_decay": 5e-05,
+    "hidden_size": 64,
+    "num_layers": 2,
+    "dropout": 0.5,
+    "use_attention": true,
+    "use_amp": true,
+    "teacher_forcing_ratio": 0.5,
+    "current_epoch": 37,
+    "val_min_mae": 0.15009460681014591,
+    "best_val_loss": 0.10154508279429542,
+    "current_val_loss": 0.156537643108103,
+    "current_val_mae": 0.1613953024811215
+}
