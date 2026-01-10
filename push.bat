@@ -1,2 +1,2 @@
-git commit -m "初步尝试集群轨迹预测"
+git commit -m "集群轨迹预测模型训练"
 git push origin main
