@@ -5,6 +5,8 @@
 *.pth
 __pycache__/
 *.pyc
+*.pt
+*.pickle
 
 # 大型数据/输出目录
 Synthetic-UAV-Flight-Trajectories/

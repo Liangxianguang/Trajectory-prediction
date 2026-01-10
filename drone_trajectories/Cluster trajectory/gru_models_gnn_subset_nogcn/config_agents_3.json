@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-01-08T19:44:22.930475",
+  "data_dir": "swarm_segments",
+  "agents": 3,
+  "batch_size": 256,
+  "epochs": 50,
+  "hidden_size": 128,
+  "num_layers": 2,
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "patience": 15,
+  "seed": 42,
+  "device": "cuda"
+}

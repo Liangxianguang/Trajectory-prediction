@@ -1,2 +1,2 @@
-git commit -m "Е┬²Ф╜╔Е╟²Х╞∙И⌡├Г╬╓Х╫╗Х©╧И╒└Ф╣▀"
+git commit -m "ЁУ╡╫Ё╒йт╪╞х╨╧Л╪ёт╓╡Б"
 git push origin main
