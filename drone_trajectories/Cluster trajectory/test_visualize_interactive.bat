@@ -16,12 +16,13 @@ echo   - 滚轮：放大/缩小
 echo.
 
 python visualize_swarm_prediction.py ^
-    --model_path newdata1_swarm_models_enhanced/best_model_agents_3.pt ^
+    --model_path exp_balanced_v1/best_model_agents_3.pt ^
     --agents 3 ^
-    --num_samples 20 ^
-    --output_dir visualization_results_interactive
+    --num_samples 200 ^
+    --fast ^
+    --output_dir visualization_results_exp_balanced_v1
 
 echo.
 echo ✓ 完成！
-echo 输出目录：visualization_results_interactive
+echo 输出目录：visualization_results_exp_balanced_v1
 pause

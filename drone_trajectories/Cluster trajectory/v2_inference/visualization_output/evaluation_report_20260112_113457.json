@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-01-12T11:34:57.117804",
+  "model_path": "d:\\Trajectory prediction\\drone_trajectories\\Cluster trajectory\\24dmodel\\swarm_segments_subset_feature\\best_model_agents_3_v2.pt",
+  "config": {
+    "input_size": 24,
+    "hidden_size": 128,
+    "num_layers": 3,
+    "dropout": 0.3,
+    "use_attention": true
+  },
+  "num_agents": 3,
+  "num_samples_visualized": 3,
+  "sample_indices": [
+    58381,
+    10058,
+    44451
+  ],
+  "data_statistics": {
+    "output_mean": [
+      -0.014940083958208561,
+      -0.008408453315496445,
+      -0.012767028994858265
+    ],
+    "output_std": [
+      1.2501038312911987,
+      1.2376205921173096,
+      1.1986593008041382
+    ]
+  },
+  "metrics": [
+    {
+      "mae": 0.0242569912225008,
+      "rmse": 0.029045945033431053,
+      "max_error": 0.05875625088810921,
+      "sample_idx": 58381
+    },
+    {
+      "mae": 0.057582657784223557,
+      "rmse": 0.07009056955575943,
+      "max_error": 0.14576062560081482,
+      "sample_idx": 10058
+    },
+    {
+      "mae": 0.18815699219703674,
+      "rmse": 0.21917559206485748,
+      "max_error": 0.4069402813911438,
+      "sample_idx": 44451
+    }
+  ],
+  "summary": {
+    "avg_mae": 0.0899988804012537,
+    "avg_rmse": 0.10610403555134933,
+    "max_mae": 0.18815699219703674,
+    "min_mae": 0.0242569912225008
+  }
+}

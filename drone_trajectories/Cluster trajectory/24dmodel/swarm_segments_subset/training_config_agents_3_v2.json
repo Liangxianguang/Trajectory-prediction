@@ -1,0 +1,22 @@
+{
+    "timestamp": "2026-01-11T22:37:48.483260",
+    "model_version": "v2 (dynamics-aware)",
+    "num_agents": 3,
+    "epochs": 300,
+    "batch_size": 512,
+    "learning_rate": 0.0002,
+    "weight_decay": 5e-05,
+    "hidden_size": 128,
+    "num_layers": 3,
+    "dropout": 0.3,
+    "use_attention": true,
+    "use_amp": true,
+    "teacher_forcing_ratio": 0.6,
+    "current_epoch": 300,
+    "best_val_loss": 0.0033412131222171917,
+    "current_val_loss": 0.0033560899163906774,
+    "current_val_mae": 0.08118232927388615,
+    "current_train_loss": 0.004180642234859988,
+    "min_val_loss": 0.0033412131222171917,
+    "min_val_mae": 0.08107994836237696
+}
