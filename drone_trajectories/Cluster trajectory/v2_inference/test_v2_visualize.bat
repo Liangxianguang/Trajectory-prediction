@@ -1,20 +1,20 @@
 @echo off
 REM ============================================================================
-REM v2 可视化测试脚本 (Windows Batch)
+REM v2 ??????????? (Windows Batch)
 REM ============================================================================
 
 setlocal enabledelayedexpansion
 
-REM 设置路径
+REM ????·??
 set WORKSPACE=d:\Trajectory prediction
 set MODEL_PATH=%WORKSPACE%\drone_trajectories\Cluster trajectory\24dmodel\swarm_segments_subset_feature\best_model_agents_3_v2.pt
 set DATA_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\swarm_segments
 set OUTPUT_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\v2_inference\visualization_output
 
-REM 检查模型文件
+REM ?????????
 if not exist "%MODEL_PATH%" (
     echo.
-    echo [错误] 模型文件不存在: %MODEL_PATH%
+    echo [????] ????????????: %MODEL_PATH%
     echo.
     pause
     exit /b 1
@@ -22,22 +22,22 @@ if not exist "%MODEL_PATH%" (
 
 echo.
 echo ============================================================================
-echo v2 可视化测试
+echo v2 ?????????
 echo ============================================================================
 echo.
-echo 模型路径:    %MODEL_PATH%
-echo 数据目录:    %DATA_DIR%
-echo 输出目录:    %OUTPUT_DIR%
+echo ???·??:    %MODEL_PATH%
+echo ??????:    %DATA_DIR%
+echo ?????:    %OUTPUT_DIR%
 echo.
 
-REM 创建输出目录
+REM ?????????
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
-REM 设置 Python 路径
+REM ???? Python ·??
 cd /d "%WORKSPACE%\drone_trajectories\Cluster trajectory\v2_inference"
 
-REM 运行可视化
-echo [1/1] 生成可视化...
+REM ???п????
+echo [1/1] ????????...
 python visualize_swarm_prediction_v2.py ^
     --model_path "%MODEL_PATH%" ^
     --agents 3 ^
@@ -50,14 +50,14 @@ python visualize_swarm_prediction_v2.py ^
 
 if errorlevel 1 (
     echo.
-    echo [错误] 可视化生成失败!
+    echo [????] ????????????!
     pause
     exit /b 1
 )
 
 echo.
-echo [?] 可视化完成
+echo [?] ????????
 echo.
-echo 输出文件位置: %OUTPUT_DIR%
+echo ??????λ??: %OUTPUT_DIR%
 echo.
 pause

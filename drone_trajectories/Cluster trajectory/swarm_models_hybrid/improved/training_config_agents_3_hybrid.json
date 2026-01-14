@@ -1,0 +1,22 @@
+{
+    "timestamp": "2026-01-12T23:16:05.437195",
+    "model_version": "ODE-GNN + 24D Features (Hybrid)",
+    "num_agents": 3,
+    "current_epoch": 21,
+    "total_epochs": 300,
+    "batch_size": 512,
+    "learning_rate": 0.0005,
+    "hidden_size": 128,
+    "num_layers": 3,
+    "dt": 0.1,
+    "weight_pos": 0.7,
+    "weight_vel": 0.25,
+    "weight_accel": 0.05,
+    "use_amp": true,
+    "use_attention": true,
+    "best_val_loss": 1.9524612113005586,
+    "best_val_mae": 1.0123853351610401,
+    "current_val_loss": 1.9961933423247602,
+    "current_val_mae": 1.049000055487785,
+    "min_val_mae": 1.0123853351610401
+}
