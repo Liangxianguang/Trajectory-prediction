@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-14T20:42:58.967883",
+  "model_version": "v4_fixed",
+  "use_gnn": true,
+  "input_features": 32,
+  "num_agents": 3,
+  "seq_in": 20,
+  "seq_out": 10,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "batch_size": 128,
+  "lr": 0.0002,
+  "weight_decay": 5e-05,
+  "epochs": 200,
+  "seed": 42,
+  "use_amp": false,
+  "gnn_hidden": 64,
+  "gnn_heads": 4,
+  "edge_threshold": 5.0,
+  "fusion_mode": "concat"
+}

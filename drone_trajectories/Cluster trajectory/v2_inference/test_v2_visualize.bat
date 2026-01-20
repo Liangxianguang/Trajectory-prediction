@@ -1,20 +1,20 @@
 @echo off
 REM ============================================================================
-REM v2 ??????????? (Windows Batch)
+REM v2 Visualization Script (Windows Batch)
 REM ============================================================================
 
 setlocal enabledelayedexpansion
 
-REM ????¡¤??
+REM Set paths
 set WORKSPACE=d:\Trajectory prediction
 set MODEL_PATH=%WORKSPACE%\drone_trajectories\Cluster trajectory\24dmodel\swarm_segments_subset_feature\best_model_agents_3_v2.pt
 set DATA_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\swarm_segments
 set OUTPUT_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\v2_inference\visualization_output
 
-REM ?????????
+REM Check model file
 if not exist "%MODEL_PATH%" (
     echo.
-    echo [????] ????????????: %MODEL_PATH%
+    echo [ERROR] Model file does not exist: %MODEL_PATH%
     echo.
     pause
     exit /b 1
@@ -22,22 +22,22 @@ if not exist "%MODEL_PATH%" (
 
 echo.
 echo ============================================================================
-echo v2 ?????????
+echo v2 Visualization
 echo ============================================================================
 echo.
-echo ???¡¤??:    %MODEL_PATH%
-echo ??????:    %DATA_DIR%
-echo ?????:    %OUTPUT_DIR%
+echo Model path:    %MODEL_PATH%
+echo Data directory:    %DATA_DIR%
+echo Output directory:    %OUTPUT_DIR%
 echo.
 
-REM ?????????
+REM Create output directory
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
-REM ???? Python ¡¤??
+REM Change to Python path
 cd /d "%WORKSPACE%\drone_trajectories\Cluster trajectory\v2_inference"
 
-REM ???§á????
-echo [1/1] ????????...
+REM Run visualization
+echo [1/1] Generating visualization...
 python visualize_swarm_prediction_v2.py ^
     --model_path "%MODEL_PATH%" ^
     --agents 3 ^
@@ -50,14 +50,14 @@ python visualize_swarm_prediction_v2.py ^
 
 if errorlevel 1 (
     echo.
-    echo [????] ????????????!
+    echo [ERROR] Visualization failed!
     pause
     exit /b 1
 )
 
 echo.
-echo [?] ????????
+echo [?] Visualization complete
 echo.
-echo ??????¦Ë??: %OUTPUT_DIR%
+echo Output file location: %OUTPUT_DIR%
 echo.
 pause

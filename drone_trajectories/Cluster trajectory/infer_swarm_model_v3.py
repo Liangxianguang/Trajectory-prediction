@@ -275,42 +275,23 @@ def infer_batch(model, features_batch, x_orig_batch, device, output_mean, output
         features_t = torch.from_numpy(features_batch).float().to(device)
         x_orig_t = torch.from_numpy(x_orig_batch).float().to(device)
 
-        # model 返回归一化的位置增量（B, seq_out, agents, 3）
-        # 以及 pred_vel 和 pred_accel（用于多任务学习，推理时忽略）
+        # 模型预测的是 Y_t - X_last (总位移)
         pred_delta_norm, _, _ = model(features_t, x_orig_t, y=None, y_velocity=None, y_accel=None, teacher_forcing_ratio=0.0)
 
         out_mean = torch.tensor(output_mean, dtype=torch.float32, device=device).view(1, 1, 1, 3)
         out_std = torch.tensor(output_std, dtype=torch.float32, device=device).view(1, 1, 1, 3)
 
-        pred_delta_phys = pred_delta_norm * out_std + out_mean
+        # 反归一化
+        pred_delta_phys = (pred_delta_norm * out_std + out_mean).cpu().numpy()
 
-        pred_absolute = apply_physical_constraints(
-            x_orig_batch,
-            pred_delta_phys.cpu().numpy(),
-            dt=0.1,
-            smoothing_weight=0.3,
-        )
+        # 重建绝对位置：last_pos + pred_delta
+        last_pos = x_orig_batch[:, -1, :, np.newaxis, :]  # (B, 1, agents, 3)
+        pred_absolute = last_pos + pred_delta_phys
 
         # 诊断打印（仅第一个批次的第一个样本）
         if debug and features_batch.shape[0] > 0:
             logger.info("=== 推理诊断信息 ===")
-            logger.info(f"输入特征形状: {features_batch.shape}")
-            logger.info(f"输入位置形状: {x_orig_batch.shape}")
-            logger.info(f"模型输出增量（归一化）形状: {pred_delta_norm.shape}")
             logger.info(f"归一化增量范围: [{pred_delta_norm.min().item():.4f}, {pred_delta_norm.max().item():.4f}]")
-            if isinstance(output_mean, torch.Tensor):
-                mean_tensor = output_mean.view(-1)
-            else:
-                mean_tensor = torch.tensor(output_mean, dtype=torch.float32, device=device).view(-1)
-            if isinstance(output_std, torch.Tensor):
-                std_tensor = output_std.view(-1)
-            else:
-                std_tensor = torch.tensor(output_std, dtype=torch.float32, device=device).view(-1)
-            logger.info(f"反归一化参数: mean={mean_tensor.cpu().numpy()}, std={std_tensor.cpu().numpy()}")
-            logger.info(f"物理增量范围: [{pred_delta_phys.min().item():.4f}, {pred_delta_phys.max().item():.4f}]")
-            logger.info(f"输入最后位置 (sample 0, agent 0): {x_orig_batch[0, -1, 0, :]}")
-            logger.info(f"预测绝对位置范围: [{pred_absolute.min():.4f}, {pred_absolute.max():.4f}]")
-            logger.info(f"预测绝对位置 (sample 0, agent 0, step 1): {pred_absolute[0, 0, 0, :]}")
 
     return pred_absolute
 

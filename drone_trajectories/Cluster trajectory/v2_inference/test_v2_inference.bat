@@ -1,22 +1,22 @@
 @echo off
 REM ============================================================================
-REM v2 推理测试脚本 (Windows Batch)
+REM v2 Inference Script (Windows Batch)
 REM ============================================================================
 
 setlocal enabledelayedexpansion
 
-REM 设置路径
+REM Set paths
 set WORKSPACE=d:\Trajectory prediction
 set MODEL_PATH=%WORKSPACE%\drone_trajectories\Cluster trajectory\24dmodel\swarm_segments_subset\best_model_agents_3_v2.pt
 set DATA_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\swarm_segments
 set OUTPUT_DIR=%WORKSPACE%\drone_trajectories\Cluster trajectory\visualization_output
 
-REM 检查模型文件
+REM Check model file
 if not exist "%MODEL_PATH%" (
     echo.
-    echo [错误] 模型文件不存在: %MODEL_PATH%
+    echo [ERROR] Model file does not exist: %MODEL_PATH%
     echo.
-    echo 请确保已运行训练脚本生成模型:
+    echo Please ensure you have trained the model using:
     echo   python train_swarm_v2_complete.py --num_agents 3
     echo.
     pause
@@ -25,19 +25,19 @@ if not exist "%MODEL_PATH%" (
 
 echo.
 echo ============================================================================
-echo v2 推理测试
+echo v2 Inference
 echo ============================================================================
 echo.
-echo 模型路径:    %MODEL_PATH%
-echo 数据目录:    %DATA_DIR%
-echo 输出目录:    %OUTPUT_DIR%
+echo Model path:    %MODEL_PATH%
+echo Data directory:    %DATA_DIR%
+echo Output directory:    %OUTPUT_DIR%
 echo.
 
-REM 设置 Python 路径
+REM Change to Python path
 cd /d "%WORKSPACE%\drone_trajectories\Cluster trajectory\v2_inference"
 
-REM 运行推理
-echo [1/3] 运行推理...
+REM Run inference
+echo [1/3] Running inference...
 python infer_swarm_model_v2.py ^
     --model_path "%MODEL_PATH%" ^
     --num_agents 3 ^
@@ -47,12 +47,12 @@ python infer_swarm_model_v2.py ^
 
 if errorlevel 1 (
     echo.
-    echo [错误] 推理失败!
+    echo [ERROR] Inference failed!
     pause
     exit /b 1
 )
 
 echo.
-echo [?] 推理完成
+echo [?] Inference complete
 echo.
 pause

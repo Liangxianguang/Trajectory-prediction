@@ -56,6 +56,7 @@
     - 左键拖拽：旋转 3D 视图
     - 右键拖拽：缩放
     - 滚轮：放大/缩小
+    python visualize_swarm_prediction_v3_gnn.py --model_path gru_models_v3_agents_3_v3_gnn_concat\last_checkpoint_0196.pt --agents 3 --use_subset --num_samples 20 --output_dir visualization_output_v3_20subset --fast_mode
 """
 
 import numpy as np
