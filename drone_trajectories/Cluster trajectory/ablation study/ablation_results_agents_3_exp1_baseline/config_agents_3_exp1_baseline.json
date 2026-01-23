@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-01-23T16:34:13.109953",
+  "experiment": "exp1_baseline",
+  "description": "基线模型 (16D, 无GAT, 无特征增强, 无BiGRU+CA)",
+  "input_features": 16,
+  "num_agents": 3,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "batch_size": 512,
+  "lr": 0.0002,
+  "weight_decay": 5e-05,
+  "epochs": 150,
+  "seed": 42,
+  "use_amp": false,
+  "current_epoch": 40,
+  "best_val_loss": 0.20031192186805938,
+  "current_val_loss": 0.20130736314588124
+}

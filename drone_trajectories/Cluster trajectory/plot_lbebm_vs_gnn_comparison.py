@@ -4,7 +4,7 @@ LBEBM3D vs GNN+BiGRU Comparison - Paper-ready Visualization Script
 ===================================================================
 
 生成出版级别的对比图表，包括：
-1. 整体性能对比（MAE/RMSE/FDE/MAPE）
+1. 整体性能对比（MAE/RMSE/ADE/MAPE）
 2. 轴向误差对比（X/Y/Z）
 3. 样本分布箱线图
 4. Per-agent 误差对比
@@ -15,9 +15,10 @@ LBEBM3D vs GNN+BiGRU Comparison - Paper-ready Visualization Script
 - GNN+BiGRU: 橙色 (#E67E22)
 
 用法:
-    python plot_lbebm_vs_gnn_comparison.py \
-        --summary_json comparison_results/comparison_summary.json \
-        --output_dir comparison_results/paper_figures \
+    REM Windows cmd 里路径包含空格时，务必给脚本路径加引号：
+    python "drone_trajectories/Cluster trajectory/plot_lbebm_vs_gnn_comparison.py" ^
+        --summary_json "drone_trajectories/Cluster trajectory/comparison_results_5k_lbebm_vs_gnn_newmodel/comparison_summary.json" ^
+        --output_dir "drone_trajectories/Cluster trajectory/comparison_results_5k_lbebm_vs_gnn_newmodel/paper_figures" ^
         --dpi 300
 """
 
@@ -117,8 +118,7 @@ def plot_overall_comparison(summary_json: Path, output_dir: Path):
     lbebm_stats = extract_metrics_stats(summary, 'LBEBM3D')
     gnn_stats = extract_metrics_stats(summary, 'GNN_BiGRU')
     
-    # 主要指标
-    metrics_to_plot = ['ADE', 'FDE', 'RMSE', 'MAPE']
+    metrics_to_plot = ['ADE', 'RMSE', 'MAPE']
     x = np.arange(len(metrics_to_plot))
     width = 0.35
     
@@ -379,16 +379,16 @@ def plot_error_trend(summary_json: Path, output_dir: Path):
 
 
 def generate_comparison_table(summary_json: Path, output_dir: Path):
-    """生成对比表格"""
+    """Generate comparison table"""
     setup_paper_style()
     
-    with open(summary_json, 'r') as f:
+    with open(summary_json, 'r', encoding='utf-8') as f:
         summary = json.load(f)
     
     lbebm_stats = extract_metrics_stats(summary, 'LBEBM3D')
     gnn_stats = extract_metrics_stats(summary, 'GNN_BiGRU')
     
-    # 创建对比表格
+    # Create comparison table
     table_data = []
     metrics_list = ['ADE', 'FDE', 'RMSE', 'MAPE', 'MAE_X', 'MAE_Y', 'MAE_Z']
     
@@ -400,37 +400,37 @@ def generate_comparison_table(summary_json: Path, output_dir: Path):
             
             table_data.append([
                 metric,
-                f"{lbebm_mean:.4f} ± {lbebm_stats[metric].std:.4f}",
-                f"{gnn_mean:.4f} ± {gnn_stats[metric].std:.4f}",
+                f"{lbebm_mean:.4f} +/- {lbebm_stats[metric].std:.4f}",
+                f"{gnn_mean:.4f} +/- {gnn_stats[metric].std:.4f}",
                 f"{improvement:+.2f}%"
             ])
     
-    # 保存为文本表格
+    # Save as text table with explicit UTF-8 encoding
     output_dir.mkdir(parents=True, exist_ok=True)
     num_samples = summary.get('num_samples', 'N/A')
-    with open(output_dir / 'comparison_table.txt', 'w') as f:
+    with open(output_dir / 'comparison_table.txt', 'w', encoding='utf-8') as f:
         f.write("=" * 100 + "\n")
         f.write(f"LBEBM3D vs GNN+BiGRU Comparison - Detailed Metrics (n={num_samples})\n")
         f.write("=" * 100 + "\n\n")
-        f.write(f"{'Metric':<15} {'LBEBM3D (mean ± std)':<30} {'GNN+BiGRU (mean ± std)':<30} {'Improvement':<15}\n")
+        f.write(f"{'Metric':<15} {'LBEBM3D (mean +/- std)':<32} {'GNN+BiGRU (mean +/- std)':<32} {'Improvement':<15}\n")
         f.write("-" * 100 + "\n")
         for row in table_data:
-            f.write(f"{row[0]:<15} {row[1]:<30} {row[2]:<30} {row[3]:<15}\n")
+            f.write(f"{row[0]:<15} {row[1]:<32} {row[2]:<32} {row[3]:<15}\n")
         f.write("=" * 100 + "\n\n")
-        f.write("说明:\n")
-        f.write("- Improvement 为正表示 GNN+BiGRU 性能更好\n")
-        f.write(f"- 所有指标基于 {num_samples} 样本评估\n")
+        f.write("Notes:\n")
+        f.write("- Positive Improvement means GNN+BiGRU performs better\n")
+        f.write(f"- All metrics based on {num_samples} samples\n")
     
     logger.info("✓ Saved: comparison_table.txt")
     
-    # 打印到控制台
+    # Print to console
     print("\n" + "=" * 100)
-    print(f"LBEBM3D vs GNN+BiGRU 详细对比 (n={num_samples})")
+    print(f"LBEBM3D vs GNN+BiGRU Detailed Comparison (n={num_samples})")
     print("=" * 100)
-    print(f"{'Metric':<15} {'LBEBM3D':<30} {'GNN+BiGRU':<30} {'Improvement':<15}")
+    print(f"{'Metric':<15} {'LBEBM3D':<32} {'GNN+BiGRU':<32} {'Improvement':<15}")
     print("-" * 100)
     for row in table_data:
-        print(f"{row[0]:<15} {row[1]:<30} {row[2]:<30} {row[3]:<15}")
+        print(f"{row[0]:<15} {row[1]:<32} {row[2]:<32} {row[3]:<15}")
     print("=" * 100 + "\n")
 
 

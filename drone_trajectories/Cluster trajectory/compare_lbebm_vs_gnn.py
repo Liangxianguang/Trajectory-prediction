@@ -223,7 +223,11 @@ def predict_gnn_bigru(
     tail_analyzer=None,
     use_tail_enhancement=False,
     edge_threshold=5.0,
-    use_physical_constraints_flag=False,
+    use_physical_constraints_flag=True,
+    use_enhanced_infer=False,
+    pc_dt: float = 0.1,
+    pc_smoothing_weight: float = 0.2,
+    tail_decay: float = 0.1,
 ):
     """
     使用 GNN+BiGRU 模型预测单个样本（v4_enhanced 风格）
@@ -275,22 +279,21 @@ def predict_gnn_bigru(
         # 尾部动力学增强（可选）
         if use_tail_enhancement and tail_analyzer is not None:
             pred_delta_phys = enhance_prediction_with_tail_dynamics(
-                pred_delta_phys, X_batch, tail_analyzer, decay_factor=0.15
+                pred_delta_phys, X_batch, tail_analyzer, decay_factor=tail_decay
             )
         
-        # 直接从 delta 重建位置（不应用物理约束，保持原始预测）
-        # pred_delta_phys 是步长增量，需要累积求和得到绝对位置
-        last_pos = X_batch[:, -1:, :, :]  # (1, 1, num_agents, 3)
-        pred_abs = last_pos + np.cumsum(pred_delta_phys, axis=1)  # (1, seq_out, num_agents, 3)
-        
-        # 如果需要应用物理约束（仅在明确需要时）
-        if use_physical_constraints_flag:
+        if use_enhanced_infer and use_physical_constraints_flag:
+            # 使用物理约束重建平滑轨迹（增强推理）
             pred_abs = apply_physical_constraints(
                 X_batch,
                 pred_delta_phys,
-                dt=0.1,
-                smoothing_weight=0.3
+                dt=pc_dt,
+                smoothing_weight=pc_smoothing_weight
             )  # (1, seq_out, agents, 3)
+        else:
+            # 直接从 delta 重建位置（保持原始预测）
+            last_pos = X_batch[:, -1:, :, :]  # (1, 1, num_agents, 3)
+            pred_abs = last_pos + np.cumsum(pred_delta_phys, axis=1)  # (1, seq_out, num_agents, 3)
         
         pred_abs = pred_abs[0]  # (seq_out, agents, 3)
     
@@ -441,12 +444,26 @@ def main():
     parser.add_argument('--no_gnn', action='store_true')
     parser.add_argument('--no_tail_enhancement', action='store_true')
     parser.add_argument('--use_physical_constraints', action='store_true', help='Apply physical constraints (default: off for fair comparison)')
+    parser.add_argument('--gnn_use_enhanced_infer', action='store_true',
+                       help='Use enhanced v4 inference (tail + physical constraints) for GNN')
+    parser.add_argument('--gnn_pc_dt', type=float, default=0.1, help='dt for physical constraints when enhanced infer is used')
+    parser.add_argument('--gnn_pc_smoothing', type=float, default=0.3, help='smoothing weight for physical constraints')
+    parser.add_argument('--gnn_tail_decay', type=float, default=0.15, help='tail enhancement decay factor')
     
     # Sample selection
     parser.add_argument('--sample_indices', type=str, default=None,
                        help='Comma-separated sample indices')
     parser.add_argument('--num_samples', type=int, default=5, help='Number of random samples')
     parser.add_argument('--seed', type=int, default=42)
+    
+    # Outlier handling
+    parser.add_argument('--remove_gnn_outliers', action='store_true',
+                       help='Remove a small fraction of worst GNN samples (by metric) from both models for robust stats')
+    parser.add_argument('--gnn_outlier_metric', type=str, default='MAE',
+                       choices=['MAE', 'FDE'],
+                       help='Metric used to detect GNN outliers (default: MAE)')
+    parser.add_argument('--gnn_outlier_percent', type=float, default=1.0,
+                       help='Percentage of worst GNN samples (by chosen metric) to drop (0-50, default: 1.0)')
     
     # Output
     parser.add_argument('--output_dir', default='comparison_lbebm_v4', help='Output directory')
@@ -607,7 +624,12 @@ def main():
             feature_means, feature_stds,
             tail_analyzer=tail_analyzer,
             use_tail_enhancement=not args.no_tail_enhancement,
-            edge_threshold=args.edge_threshold
+            edge_threshold=args.edge_threshold,
+            use_physical_constraints_flag=(args.use_physical_constraints or args.gnn_use_enhanced_infer),
+            use_enhanced_infer=args.gnn_use_enhanced_infer,
+            pc_dt=args.gnn_pc_dt,
+            pc_smoothing_weight=args.gnn_pc_smoothing,
+            tail_decay=args.gnn_tail_decay,
         )
         
         # Compute metrics (for all agents)
@@ -627,7 +649,47 @@ def main():
             sample_idx, output_path
         )
     
-    # === Aggregate Results ===
+    # === Optional: remove extreme GNN outliers (and corresponding LBEBM samples) ===
+    used_metrics_lbebm = all_metrics_lbebm
+    used_metrics_gnn = all_metrics_gnn
+    used_sample_indices = sample_indices
+    removed_sample_indices = []
+    
+    if args.remove_gnn_outliers:
+        metric_name = args.gnn_outlier_metric
+        if not all_metrics_gnn or metric_name not in all_metrics_gnn[0]:
+            logger.warning(f"Outlier removal requested, but metric '{metric_name}' not found. Skipping outlier removal.")
+        else:
+            perc = max(0.0, min(args.gnn_outlier_percent, 50.0))
+            if perc <= 0.0:
+                logger.info("Outlier percentage <= 0, skipping outlier removal.")
+            else:
+                gnn_values = np.array([m[metric_name] for m in all_metrics_gnn], dtype=np.float32)
+                n = len(gnn_values)
+                k = int(np.ceil(n * perc / 100.0))
+                if k <= 0:
+                    logger.info("Computed outlier count k=0, skipping outlier removal.")
+                elif k >= n:
+                    logger.warning("Outlier count >= sample count, skipping outlier removal.")
+                else:
+                    # threshold: keep the best (n-k) samples
+                    threshold = np.partition(gnn_values, n - k - 1)[n - k - 1]
+                    keep_mask = gnn_values <= threshold
+                    
+                    used_metrics_lbebm = [m for m, keep in zip(all_metrics_lbebm, keep_mask) if keep]
+                    used_metrics_gnn = [m for m, keep in zip(all_metrics_gnn, keep_mask) if keep]
+                    removed_sample_indices = [idx for idx, keep in zip(sample_indices, keep_mask) if not keep]
+                    used_sample_indices = [idx for idx, keep in zip(sample_indices, keep_mask) if keep]
+                    
+                    logger.info(
+                        f"Outlier removal enabled: metric={metric_name}, "
+                        f"percent={perc}%, removed={len(removed_sample_indices)}/{n} samples."
+                    )
+                    if removed_sample_indices:
+                        logger.info(f"Removed sample indices (GNN worst cases): {removed_sample_indices}")
+                    logger.info(f"Remaining samples for statistics: {len(used_sample_indices)}")
+    
+    # === Aggregate Results === (on possibly filtered samples)
     logger.info("\n=== Overall Results ===")
     
     # 计算所有指标的汇总统计
@@ -666,8 +728,8 @@ def main():
         
         return stats
     
-    lbebm_aggregate = compute_aggregate_stats(all_metrics_lbebm)
-    gnn_aggregate = compute_aggregate_stats(all_metrics_gnn)
+    lbebm_aggregate = compute_aggregate_stats(used_metrics_lbebm)
+    gnn_aggregate = compute_aggregate_stats(used_metrics_gnn)
     
     logger.info(f"\n✓ LBEBM3D Statistics:")
     logger.info(f"  ADE: {lbebm_aggregate['ADE']['mean']:.4f} ± {lbebm_aggregate['ADE']['std']:.4f}")
@@ -690,15 +752,21 @@ def main():
     
     # Save summary
     summary = {
-        "num_samples": len(all_metrics_lbebm),
-        "sample_indices": sample_indices,
+        "num_samples": len(used_metrics_lbebm),
+        "sample_indices": used_sample_indices,
+        "removed_sample_indices": removed_sample_indices,
+        "outlier_filter": {
+            "enabled": bool(args.remove_gnn_outliers),
+            "metric": args.gnn_outlier_metric,
+            "percent": args.gnn_outlier_percent,
+        },
         "LBEBM3D": {
             "aggregate_stats": lbebm_aggregate,
-            "all_metrics": all_metrics_lbebm,
+            "all_metrics": used_metrics_lbebm,
         },
         "GNN_BiGRU": {
             "aggregate_stats": gnn_aggregate,
-            "all_metrics": all_metrics_gnn,
+            "all_metrics": used_metrics_gnn,
         },
     }
     
