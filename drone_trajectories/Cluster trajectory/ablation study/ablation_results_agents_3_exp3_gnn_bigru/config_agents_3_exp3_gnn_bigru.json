@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-01-24T00:23:31.454266",
+  "experiment": "exp3_gnn_bigru",
+  "description": "GAT+BiGRU+Cross Attention (16D, 无特征增强)",
+  "input_features": 16,
+  "num_agents": 3,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "gnn_hidden": 64,
+  "gnn_heads": 4,
+  "edge_threshold": 5.0,
+  "batch_size": 128,
+  "lr": 0.0002,
+  "epochs": 150,
+  "seed": 42,
+  "current_epoch": 149,
+  "best_val_loss": 0.08341403829140795,
+  "current_val_loss": 0.0836688832897279
+}

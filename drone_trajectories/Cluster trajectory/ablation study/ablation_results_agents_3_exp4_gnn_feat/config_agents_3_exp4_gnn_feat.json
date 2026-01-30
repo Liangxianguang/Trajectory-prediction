@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-01-24T14:11:26.646046",
+  "experiment": "exp4_gnn_feat",
+  "description": "GAT+特征增强 (32D, 无BiGRU+Cross Attention)",
+  "input_features": 32,
+  "num_agents": 3,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "gnn_hidden": 64,
+  "gnn_heads": 4,
+  "edge_threshold": 5.0,
+  "batch_size": 128,
+  "lr": 0.0002,
+  "epochs": 150,
+  "seed": 42,
+  "current_epoch": 149,
+  "best_val_loss": 0.07110892536325587,
+  "current_val_loss": 0.07359459353610873
+}

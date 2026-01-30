@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-01-23T20:32:42.845930",
+  "experiment": "exp2_feat_bigru",
+  "description": "特征增强+BiGRU+Cross Attention (32D, 无GAT)",
+  "input_features": 32,
+  "num_agents": 3,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "batch_size": 512,
+  "lr": 0.0002,
+  "weight_decay": 5e-05,
+  "epochs": 150,
+  "seed": 42,
+  "use_amp": false,
+  "current_epoch": 149,
+  "best_val_loss": 0.0647407359133164,
+  "current_val_loss": 0.06489234479765098
+}

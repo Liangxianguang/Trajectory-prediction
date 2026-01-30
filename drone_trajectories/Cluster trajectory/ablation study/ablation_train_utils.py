@@ -196,6 +196,8 @@ def load_ablation_data(data_dir, num_agents, feature_dim=16, batch_size=256,
             features_dir / f'features_agents_{num_agents}.npz',
             # 格式5: features_agents_3_32d.npz (无subset后缀)
             features_dir / f'features_agents_{num_agents}_{feature_dim}d.npz',
+            # 格式6: features_agents_3_subset.npz（你当前16D子集文件的命名）
+            features_dir / f'features_agents_{num_agents}{subset_suffix}.npz',
         ]
         
         for feat_path in feature_candidates:

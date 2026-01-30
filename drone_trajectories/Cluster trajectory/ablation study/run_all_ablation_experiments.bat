@@ -51,7 +51,7 @@ set BS_EXP4=128
 set BS_EXP5=128
 
 REM Feature directories (relative to this .bat directory)
-set FEAT_16D=..\swarm_features
+set FEAT_16D=..\swarm_segments_subset
 set FEAT_32D=..\features_32d
 
 REM Optional: reduce fragmentation / help OOM in some cases

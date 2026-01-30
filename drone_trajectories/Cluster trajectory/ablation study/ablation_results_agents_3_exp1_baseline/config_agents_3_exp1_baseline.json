@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-23T16:34:13.109953",
+  "timestamp": "2026-01-23T18:01:10.753818",
   "experiment": "exp1_baseline",
   "description": "基线模型 (16D, 无GAT, 无特征增强, 无BiGRU+CA)",
   "input_features": 16,
@@ -12,7 +12,7 @@
   "epochs": 150,
   "seed": 42,
   "use_amp": false,
-  "current_epoch": 40,
-  "best_val_loss": 0.20031192186805938,
-  "current_val_loss": 0.20130736314588124
+  "current_epoch": 149,
+  "best_val_loss": 0.13880758500761456,
+  "current_val_loss": 0.138819639550315
 }

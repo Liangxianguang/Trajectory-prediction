@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-01-25T03:25:38.573106",
+  "experiment": "exp5_full",
+  "description": "完整模型 DG32-BCAT (32D, GAT+特征增强+BiGRU+Cross Attention)",
+  "input_features": 32,
+  "num_agents": 3,
+  "hidden_size": 128,
+  "num_layers": 3,
+  "gnn_hidden": 64,
+  "gnn_heads": 4,
+  "edge_threshold": 5.0,
+  "batch_size": 128,
+  "lr": 0.0002,
+  "epochs": 150,
+  "seed": 42,
+  "current_epoch": 149,
+  "best_val_loss": 0.06556098788148827,
+  "current_val_loss": 0.0656998877827492
+}
