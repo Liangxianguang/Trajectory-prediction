@@ -137,8 +137,6 @@ dependencies:
     - shellingham==1.5.4
     - sympy==1.14.0
     - thop==0.1.1.post2209072238
-    - torch==2.9.1+cu130
-    - torchvision==0.24.1+cu130
     - tqdm==4.67.1
     - typer-slim==0.20.0
     - typing_extensions==4.15.0
