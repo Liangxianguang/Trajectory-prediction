@@ -1,0 +1,501 @@
+2026-03-05 16:36:24,836 - INFO - ====================================================================================================
+2026-03-05 16:36:24,836 - INFO - MRGTraj Swarm - 优化版训练（ADE/FDE 加速）
+2026-03-05 16:36:24,836 - INFO - ====================================================================================================
+2026-03-05 16:36:24,836 - INFO - 配置参数:
+2026-03-05 16:36:24,836 - INFO -   data_dir: ../Cluster trajectory/swarm_segments
+2026-03-05 16:36:24,836 - INFO -   num_agents: 3
+2026-03-05 16:36:24,836 - INFO -   d_model: 256
+2026-03-05 16:36:24,837 - INFO -   n_heads: 4
+2026-03-05 16:36:24,837 - INFO -   n_layers: 2
+2026-03-05 16:36:24,837 - INFO -   noise_dim: 64
+2026-03-05 16:36:24,837 - INFO -   agent_dim: 3
+2026-03-05 16:36:24,837 - INFO -   obs_len: 20
+2026-03-05 16:36:24,838 - INFO -   pred_len: 10
+2026-03-05 16:36:24,838 - INFO -   batch_size: 512
+2026-03-05 16:36:24,838 - INFO -   num_epochs: 300
+2026-03-05 16:36:24,838 - INFO -   lr: 0.002
+2026-03-05 16:36:24,838 - INFO -   weight_decay: 1e-05
+2026-03-05 16:36:24,838 - INFO -   seed: 42
+2026-03-05 16:36:24,838 - INFO -   gpu_num: 0
+2026-03-05 16:36:24,838 - INFO -   checkpoint_dir: checkpoints_optimized
+2026-03-05 16:36:24,838 - INFO - ====================================================================================================
+2026-03-05 16:36:24,838 - INFO - 
+加载数据...
+2026-03-05 16:36:24,839 - INFO - 使用数据文件:
+2026-03-05 16:36:24,839 - INFO -   输入: D:\Trajectory prediction\drone_trajectories\MRGTraj-main\..\Cluster trajectory\swarm_segments\input_agents_3_subset.npz
+2026-03-05 16:36:24,839 - INFO -   输出: D:\Trajectory prediction\drone_trajectories\MRGTraj-main\..\Cluster trajectory\swarm_segments\output_agents_3_subset.npz
+2026-03-05 16:36:24,839 - INFO - 加载数据: D:\Trajectory prediction\drone_trajectories\MRGTraj-main\..\Cluster trajectory\swarm_segments\input_agents_3_subset.npz, D:\Trajectory prediction\drone_trajectories\MRGTraj-main\..\Cluster trajectory\swarm_segments\output_agents_3_subset.npz
+2026-03-05 16:36:25,879 - INFO -   X 形状: (20, 230232, 3, 3)
+2026-03-05 16:36:25,880 - INFO -   Y 形状: (10, 230232, 3, 3)
+2026-03-05 16:36:25,885 - INFO -   总样本数: 230232
+2026-03-05 16:36:25,885 - INFO -   无人机数: 3
+2026-03-05 16:36:25,885 - INFO - [OK] 数据加载成功
+2026-03-05 16:36:25,885 - INFO -   总样本数: 230232
+2026-03-05 16:36:25,886 - INFO -   批次大小: 512
+2026-03-05 16:36:25,886 - INFO -   每个 epoch 的批次数: 450
+2026-03-05 16:36:25,886 - INFO - 
+创建模型...
+2026-03-05 16:36:26,135 - INFO - [OK] 模型创建成功
+2026-03-05 16:36:26,135 - INFO -   模型架构: MRGTrajSwarm
+2026-03-05 16:36:26,135 - INFO -   总参数: 7,139,883
+2026-03-05 16:36:26,135 - INFO -   可训练参数: 7,139,883
+2026-03-05 16:36:27,118 - INFO - 
+优化器配置:
+2026-03-05 16:36:27,119 - INFO -   类型: Adam
+2026-03-05 16:36:27,119 - INFO -   初始学习率: 0.002
+2026-03-05 16:36:27,119 - INFO -   权重衰减: 1e-05
+2026-03-05 16:36:27,119 - WARNING - 
+TensorBoard 不可用
+2026-03-05 16:36:27,119 - INFO - 
+====================================================================================================
+2026-03-05 16:36:27,119 - INFO - 开始训练...
+2026-03-05 16:36:27,119 - INFO - ====================================================================================================
+
+2026-03-05 16:37:47,216 - INFO - [Epoch 1/300] ade=21.271456 | ade_loss=21.271456 | fde=21.654438 | fde_loss=21.654438 | kl_loss=45.444095 | l2_loss=238.664978 | smooth_loss=0.021500 | total_loss=271.227279 | vel_loss=0.048846 | weighted_ade=21.345299 | LR=2.00e-04
+2026-03-05 16:37:47,312 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=21.271456m
+2026-03-05 16:39:06,211 - INFO - [Epoch 2/300] ade=7.527898 | ade_loss=7.527898 | fde=7.879285 | fde_loss=7.879285 | kl_loss=46.708484 | l2_loss=54.145825 | smooth_loss=0.151371 | total_loss=65.998802 | vel_loss=0.090958 | weighted_ade=7.593278 | LR=4.00e-04
+2026-03-05 16:39:06,309 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=7.527898m
+2026-03-05 16:40:43,368 - INFO - [Epoch 3/300] ade=4.515709 | ade_loss=4.515709 | fde=4.848370 | fde_loss=4.848370 | kl_loss=48.602650 | l2_loss=24.597456 | smooth_loss=0.083948 | total_loss=31.941140 | vel_loss=0.067200 | weighted_ade=4.574230 | LR=6.00e-04
+2026-03-05 16:40:43,458 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=4.515709m
+2026-03-05 16:42:23,118 - INFO - [Epoch 4/300] ade=3.978510 | ade_loss=3.978510 | fde=4.276658 | fde_loss=4.276658 | kl_loss=38.674287 | l2_loss=16.615591 | smooth_loss=0.083318 | total_loss=23.040526 | vel_loss=0.063777 | weighted_ade=4.029635 | LR=8.00e-04
+2026-03-05 16:42:23,217 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.978510m
+2026-03-05 16:44:04,805 - INFO - [Epoch 5/300] ade=3.836844 | ade_loss=3.836844 | fde=4.090904 | fde_loss=4.090904 | kl_loss=31.198114 | l2_loss=12.681481 | smooth_loss=0.082504 | total_loss=18.801502 | vel_loss=0.060108 | weighted_ade=3.881023 | LR=1.00e-03
+2026-03-05 16:44:04,900 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.836844m
+2026-03-05 16:45:44,683 - INFO - [Epoch 6/300] ade=3.672838 | ade_loss=3.672838 | fde=3.895189 | fde_loss=3.895189 | kl_loss=25.148478 | l2_loss=10.051962 | smooth_loss=0.076491 | total_loss=15.856303 | vel_loss=0.056389 | weighted_ade=3.710231 | LR=1.20e-03
+2026-03-05 16:45:44,771 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.672838m
+2026-03-05 16:47:26,223 - INFO - [Epoch 7/300] ade=3.745507 | ade_loss=3.745507 | fde=3.942123 | fde_loss=3.942123 | kl_loss=19.645628 | l2_loss=9.109925 | smooth_loss=0.072361 | total_loss=14.953653 | vel_loss=0.054227 | weighted_ade=3.777224 | LR=1.40e-03
+2026-03-05 16:49:06,111 - INFO - [Epoch 8/300] ade=3.453486 | ade_loss=3.453486 | fde=3.638094 | fde_loss=3.638094 | kl_loss=13.951342 | l2_loss=7.276968 | smooth_loss=0.078171 | total_loss=12.635922 | vel_loss=0.055146 | weighted_ade=3.481822 | LR=1.60e-03
+2026-03-05 16:49:06,200 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.453486m
+2026-03-05 16:50:45,977 - INFO - [Epoch 9/300] ade=3.085622 | ade_loss=3.085622 | fde=3.264880 | fde_loss=3.264880 | kl_loss=10.215547 | l2_loss=5.746083 | smooth_loss=0.078930 | total_loss=10.529096 | vel_loss=0.054384 | weighted_ade=3.112499 | LR=1.80e-03
+2026-03-05 16:50:46,061 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.085622m
+2026-03-05 16:52:27,213 - INFO - [Epoch 10/300] ade=3.634112 | ade_loss=3.634112 | fde=3.799668 | fde_loss=3.799668 | kl_loss=9.081408 | l2_loss=7.329118 | smooth_loss=0.081866 | total_loss=12.889978 | vel_loss=0.055192 | weighted_ade=3.658990 | LR=2.00e-03
+2026-03-05 16:53:16,350 - INFO - [Epoch 11/300] ade=3.046125 | ade_loss=3.046125 | fde=3.210259 | fde_loss=3.210259 | kl_loss=6.366562 | l2_loss=5.058912 | smooth_loss=0.079673 | total_loss=9.744257 | vel_loss=0.053531 | weighted_ade=3.069966 | LR=2.00e-03
+2026-03-05 16:53:16,439 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=3.046125m
+2026-03-05 16:53:57,165 - INFO - [Epoch 12/300] ade=2.923025 | ade_loss=2.923025 | fde=3.080068 | fde_loss=3.080068 | kl_loss=5.122617 | l2_loss=4.595802 | smooth_loss=0.085545 | total_loss=9.089021 | vel_loss=0.053586 | weighted_ade=2.946190 | LR=2.00e-03
+2026-03-05 16:53:57,260 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.923025m
+2026-03-05 16:54:37,983 - INFO - [Epoch 13/300] ade=2.851256 | ade_loss=2.851256 | fde=3.000782 | fde_loss=3.000782 | kl_loss=4.324393 | l2_loss=4.345624 | smooth_loss=0.092507 | total_loss=8.725587 | vel_loss=0.055076 | weighted_ade=2.873544 | LR=2.00e-03
+2026-03-05 16:54:38,069 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.851256m
+2026-03-05 16:55:18,773 - INFO - [Epoch 14/300] ade=2.887404 | ade_loss=2.887404 | fde=3.032757 | fde_loss=3.032757 | kl_loss=3.620898 | l2_loss=4.434847 | smooth_loss=0.096221 | total_loss=8.859509 | vel_loss=0.055713 | weighted_ade=2.909521 | LR=2.00e-03
+2026-03-05 16:55:59,428 - INFO - [Epoch 15/300] ade=2.917300 | ade_loss=2.917300 | fde=3.057779 | fde_loss=3.057779 | kl_loss=3.342773 | l2_loss=4.568968 | smooth_loss=0.097382 | total_loss=9.030711 | vel_loss=0.054801 | weighted_ade=2.938676 | LR=2.00e-03
+2026-03-05 16:56:40,102 - INFO - [Epoch 16/300] ade=2.809673 | ade_loss=2.809673 | fde=2.939849 | fde_loss=2.939849 | kl_loss=2.541123 | l2_loss=4.101155 | smooth_loss=0.098370 | total_loss=8.401244 | vel_loss=0.053424 | weighted_ade=2.829656 | LR=2.00e-03
+2026-03-05 16:56:40,196 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.809673m
+2026-03-05 16:57:20,914 - INFO - [Epoch 17/300] ade=2.470706 | ade_loss=2.470706 | fde=2.606046 | fde_loss=2.606046 | kl_loss=1.885307 | l2_loss=3.187533 | smooth_loss=0.097081 | total_loss=6.996227 | vel_loss=0.051344 | weighted_ade=2.491826 | LR=2.00e-03
+2026-03-05 16:57:21,004 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.470706m
+2026-03-05 16:58:02,073 - INFO - [Epoch 18/300] ade=2.631906 | ade_loss=2.631906 | fde=2.761001 | fde_loss=2.761001 | kl_loss=1.591647 | l2_loss=3.596637 | smooth_loss=0.096076 | total_loss=7.635051 | vel_loss=0.050365 | weighted_ade=2.651979 | LR=2.00e-03
+2026-03-05 16:58:43,056 - INFO - [Epoch 19/300] ade=2.575955 | ade_loss=2.575955 | fde=2.701908 | fde_loss=2.701908 | kl_loss=1.077558 | l2_loss=3.477729 | smooth_loss=0.094805 | total_loss=7.430220 | vel_loss=0.049223 | weighted_ade=2.595702 | LR=2.00e-03
+2026-03-05 16:59:23,803 - INFO - [Epoch 20/300] ade=2.555648 | ade_loss=2.555648 | fde=2.681931 | fde_loss=2.681931 | kl_loss=0.458040 | l2_loss=3.371390 | smooth_loss=0.091849 | total_loss=7.293580 | vel_loss=0.047603 | weighted_ade=2.575476 | LR=2.00e-03
+2026-03-05 16:59:23,893 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 20)
+2026-03-05 17:00:04,589 - INFO - [Epoch 21/300] ade=2.526296 | ade_loss=2.526296 | fde=2.649963 | fde_loss=2.649963 | kl_loss=0.405704 | l2_loss=3.304571 | smooth_loss=0.087317 | total_loss=7.184856 | vel_loss=0.045603 | weighted_ade=2.546001 | LR=1.99e-03
+2026-03-05 17:00:45,450 - INFO - [Epoch 22/300] ade=2.729757 | ade_loss=2.729757 | fde=2.845937 | fde_loss=2.845937 | kl_loss=0.537096 | l2_loss=3.925170 | smooth_loss=0.085244 | total_loss=8.094382 | vel_loss=0.044377 | weighted_ade=2.748228 | LR=1.99e-03
+2026-03-05 17:01:26,285 - INFO - [Epoch 23/300] ade=2.704961 | ade_loss=2.704961 | fde=2.823318 | fde_loss=2.823318 | kl_loss=0.175000 | l2_loss=3.801346 | smooth_loss=0.084405 | total_loss=7.939235 | vel_loss=0.043804 | weighted_ade=2.723841 | LR=1.99e-03
+2026-03-05 17:02:06,972 - INFO - [Epoch 24/300] ade=2.507926 | ade_loss=2.507926 | fde=2.625927 | fde_loss=2.625927 | kl_loss=0.012834 | l2_loss=3.252519 | smooth_loss=0.082469 | total_loss=7.111746 | vel_loss=0.042788 | weighted_ade=2.526568 | LR=1.99e-03
+2026-03-05 17:02:47,765 - INFO - [Epoch 25/300] ade=2.716042 | ade_loss=2.716042 | fde=2.828173 | fde_loss=2.828173 | kl_loss=0.056230 | l2_loss=3.901063 | smooth_loss=0.082230 | total_loss=8.054903 | vel_loss=0.042837 | weighted_ade=2.733875 | LR=1.99e-03
+2026-03-05 17:03:28,526 - INFO - [Epoch 26/300] ade=2.418799 | ade_loss=2.418799 | fde=2.535252 | fde_loss=2.535252 | kl_loss=0.023956 | l2_loss=3.080074 | smooth_loss=0.081690 | total_loss=6.817507 | vel_loss=0.042014 | weighted_ade=2.437107 | LR=1.99e-03
+2026-03-05 17:03:28,617 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.418799m
+2026-03-05 17:04:09,419 - INFO - [Epoch 27/300] ade=2.553064 | ade_loss=2.553064 | fde=2.666592 | fde_loss=2.666592 | kl_loss=0.039573 | l2_loss=3.420001 | smooth_loss=0.082138 | total_loss=7.354402 | vel_loss=0.042310 | weighted_ade=2.570871 | LR=1.99e-03
+2026-03-05 17:04:50,168 - INFO - [Epoch 28/300] ade=2.434733 | ade_loss=2.434733 | fde=2.544632 | fde_loss=2.544632 | kl_loss=0.025662 | l2_loss=3.057992 | smooth_loss=0.082181 | total_loss=6.829987 | vel_loss=0.041550 | weighted_ade=2.451986 | LR=1.98e-03
+2026-03-05 17:05:30,959 - INFO - [Epoch 29/300] ade=2.497414 | ade_loss=2.497414 | fde=2.606584 | fde_loss=2.606584 | kl_loss=0.010472 | l2_loss=3.213502 | smooth_loss=0.082014 | total_loss=7.081093 | vel_loss=0.041226 | weighted_ade=2.514716 | LR=1.98e-03
+2026-03-05 17:06:11,692 - INFO - [Epoch 30/300] ade=2.314097 | ade_loss=2.314097 | fde=2.428286 | fde_loss=2.428286 | kl_loss=0.021760 | l2_loss=2.810966 | smooth_loss=0.079815 | total_loss=6.420125 | vel_loss=0.040606 | weighted_ade=2.332021 | LR=1.98e-03
+2026-03-05 17:06:11,785 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.314097m
+2026-03-05 17:06:52,447 - INFO - [Epoch 31/300] ade=2.525995 | ade_loss=2.525995 | fde=2.633630 | fde_loss=2.633630 | kl_loss=0.005935 | l2_loss=3.258923 | smooth_loss=0.080867 | total_loss=7.181072 | vel_loss=0.041235 | weighted_ade=2.542934 | LR=1.98e-03
+2026-03-05 17:07:33,203 - INFO - [Epoch 32/300] ade=2.218976 | ade_loss=2.218976 | fde=2.328309 | fde_loss=2.328309 | kl_loss=0.004357 | l2_loss=2.504723 | smooth_loss=0.081333 | total_loss=5.992983 | vel_loss=0.040477 | weighted_ade=2.236108 | LR=1.97e-03
+2026-03-05 17:07:33,289 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.218976m
+2026-03-05 17:08:13,999 - INFO - [Epoch 33/300] ade=2.287184 | ade_loss=2.287184 | fde=2.393552 | fde_loss=2.393552 | kl_loss=0.004348 | l2_loss=2.677798 | smooth_loss=0.080359 | total_loss=6.268936 | vel_loss=0.039986 | weighted_ade=2.303889 | LR=1.97e-03
+2026-03-05 17:08:54,696 - INFO - [Epoch 34/300] ade=2.326294 | ade_loss=2.326294 | fde=2.432407 | fde_loss=2.432407 | kl_loss=0.001441 | l2_loss=2.801329 | smooth_loss=0.076977 | total_loss=6.452783 | vel_loss=0.038571 | weighted_ade=2.342989 | LR=1.97e-03
+2026-03-05 17:09:35,461 - INFO - [Epoch 35/300] ade=2.372920 | ade_loss=2.372920 | fde=2.479767 | fde_loss=2.479767 | kl_loss=0.000450 | l2_loss=2.902870 | smooth_loss=0.078035 | total_loss=6.630578 | vel_loss=0.039447 | weighted_ade=2.389954 | LR=1.97e-03
+2026-03-05 17:10:16,195 - INFO - [Epoch 36/300] ade=2.484966 | ade_loss=2.484966 | fde=2.588241 | fde_loss=2.588241 | kl_loss=0.000098 | l2_loss=3.123325 | smooth_loss=0.076814 | total_loss=7.022050 | vel_loss=0.039006 | weighted_ade=2.501312 | LR=1.96e-03
+2026-03-05 17:10:56,909 - INFO - [Epoch 37/300] ade=2.106162 | ade_loss=2.106162 | fde=2.211619 | fde_loss=2.211619 | kl_loss=0.000087 | l2_loss=2.275699 | smooth_loss=0.078105 | total_loss=5.631819 | vel_loss=0.038681 | weighted_ade=2.122764 | LR=1.96e-03
+2026-03-05 17:10:57,002 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.106162m
+2026-03-05 17:11:37,742 - INFO - [Epoch 38/300] ade=2.401440 | ade_loss=2.401440 | fde=2.505013 | fde_loss=2.505013 | kl_loss=0.000200 | l2_loss=3.053302 | smooth_loss=0.077605 | total_loss=6.836731 | vel_loss=0.039123 | weighted_ade=2.417869 | LR=1.96e-03
+2026-03-05 17:12:18,494 - INFO - [Epoch 39/300] ade=2.298443 | ade_loss=2.298443 | fde=2.401622 | fde_loss=2.401622 | kl_loss=0.000169 | l2_loss=2.766643 | smooth_loss=0.075125 | total_loss=6.411876 | vel_loss=0.037738 | weighted_ade=2.314820 | LR=1.95e-03
+2026-03-05 17:12:59,163 - INFO - [Epoch 40/300] ade=2.249408 | ade_loss=2.249408 | fde=2.353489 | fde_loss=2.353489 | kl_loss=0.000272 | l2_loss=2.632632 | smooth_loss=0.074350 | total_loss=6.217047 | vel_loss=0.037205 | weighted_ade=2.266030 | LR=1.95e-03
+2026-03-05 17:12:59,248 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 40)
+2026-03-05 17:13:40,011 - INFO - [Epoch 41/300] ade=2.269700 | ade_loss=2.269700 | fde=2.371185 | fde_loss=2.371185 | kl_loss=0.000502 | l2_loss=2.616043 | smooth_loss=0.074286 | total_loss=6.242893 | vel_loss=0.037138 | weighted_ade=2.285844 | LR=1.95e-03
+2026-03-05 17:14:20,763 - INFO - [Epoch 42/300] ade=2.199830 | ade_loss=2.199830 | fde=2.299334 | fde_loss=2.299334 | kl_loss=0.000104 | l2_loss=2.444454 | smooth_loss=0.072896 | total_loss=5.977846 | vel_loss=0.036353 | weighted_ade=2.215623 | LR=1.94e-03
+2026-03-05 17:15:01,386 - INFO - [Epoch 43/300] ade=2.210474 | ade_loss=2.210474 | fde=2.314543 | fde_loss=2.314543 | kl_loss=0.000078 | l2_loss=2.517007 | smooth_loss=0.071047 | total_loss=6.072363 | vel_loss=0.036350 | weighted_ade=2.227276 | LR=1.94e-03
+2026-03-05 17:15:42,156 - INFO - [Epoch 44/300] ade=2.006800 | ade_loss=2.006800 | fde=2.108716 | fde_loss=2.108716 | kl_loss=0.000079 | l2_loss=2.002887 | smooth_loss=0.071439 | total_loss=5.273436 | vel_loss=0.035440 | weighted_ade=2.023019 | LR=1.94e-03
+2026-03-05 17:15:42,247 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.006800m
+2026-03-05 17:16:24,252 - INFO - [Epoch 45/300] ade=2.366535 | ade_loss=2.366535 | fde=2.465969 | fde_loss=2.465969 | kl_loss=0.000087 | l2_loss=2.826915 | smooth_loss=0.073584 | total_loss=6.631524 | vel_loss=0.037456 | weighted_ade=2.382584 | LR=1.93e-03
+2026-03-05 17:17:05,153 - INFO - [Epoch 46/300] ade=2.148357 | ade_loss=2.148357 | fde=2.249875 | fde_loss=2.249875 | kl_loss=0.000059 | l2_loss=2.317377 | smooth_loss=0.071890 | total_loss=5.814256 | vel_loss=0.036200 | weighted_ade=2.164726 | LR=1.93e-03
+2026-03-05 17:17:46,828 - INFO - [Epoch 47/300] ade=2.177983 | ade_loss=2.177983 | fde=2.277135 | fde_loss=2.277135 | kl_loss=0.000201 | l2_loss=2.391219 | smooth_loss=0.070377 | total_loss=5.938603 | vel_loss=0.035497 | weighted_ade=2.193892 | LR=1.92e-03
+2026-03-05 17:18:28,384 - INFO - [Epoch 48/300] ade=2.747971 | ade_loss=2.747971 | fde=2.863232 | fde_loss=2.863232 | kl_loss=0.000623 | l2_loss=4.955930 | smooth_loss=0.104012 | total_loss=9.230306 | vel_loss=0.054611 | weighted_ade=2.766768 | LR=1.92e-03
+2026-03-05 17:19:09,931 - INFO - [Epoch 49/300] ade=2.029346 | ade_loss=2.029346 | fde=2.133339 | fde_loss=2.133339 | kl_loss=0.000272 | l2_loss=2.083626 | smooth_loss=0.070621 | total_loss=5.431936 | vel_loss=0.035867 | weighted_ade=2.046291 | LR=1.92e-03
+2026-03-05 17:19:51,452 - INFO - [Epoch 50/300] ade=2.046440 | ade_loss=2.046440 | fde=2.148745 | fde_loss=2.148745 | kl_loss=0.000169 | l2_loss=2.098264 | smooth_loss=0.069604 | total_loss=5.482980 | vel_loss=0.035392 | weighted_ade=2.063168 | LR=1.91e-03
+2026-03-05 17:20:32,914 - INFO - [Epoch 51/300] ade=2.192830 | ade_loss=2.192830 | fde=2.291361 | fde_loss=2.291361 | kl_loss=0.000017 | l2_loss=2.402811 | smooth_loss=0.068768 | total_loss=6.013970 | vel_loss=0.035176 | weighted_ade=2.208709 | LR=1.91e-03
+2026-03-05 17:21:13,765 - INFO - [Epoch 52/300] ade=2.057315 | ade_loss=2.057315 | fde=2.158340 | fde_loss=2.158340 | kl_loss=0.000015 | l2_loss=2.137758 | smooth_loss=0.067702 | total_loss=5.555622 | vel_loss=0.034467 | weighted_ade=2.073773 | LR=1.90e-03
+2026-03-05 17:21:54,227 - INFO - [Epoch 53/300] ade=2.005904 | ade_loss=2.005904 | fde=2.103910 | fde_loss=2.103910 | kl_loss=0.000091 | l2_loss=1.994922 | smooth_loss=0.068415 | total_loss=5.348688 | vel_loss=0.034650 | weighted_ade=2.021804 | LR=1.90e-03
+2026-03-05 17:21:54,312 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=2.005904m
+2026-03-05 17:22:34,823 - INFO - [Epoch 54/300] ade=2.053062 | ade_loss=2.053062 | fde=2.149988 | fde_loss=2.149988 | kl_loss=0.000118 | l2_loss=2.116889 | smooth_loss=0.067115 | total_loss=5.547914 | vel_loss=0.033976 | weighted_ade=2.068969 | LR=1.89e-03
+2026-03-05 17:23:15,317 - INFO - [Epoch 55/300] ade=2.076310 | ade_loss=2.076310 | fde=2.173753 | fde_loss=2.173753 | kl_loss=0.000062 | l2_loss=2.164278 | smooth_loss=0.066302 | total_loss=5.641122 | vel_loss=0.033834 | weighted_ade=2.092276 | LR=1.89e-03
+2026-03-05 17:23:55,788 - INFO - [Epoch 56/300] ade=2.157374 | ade_loss=2.157374 | fde=2.255662 | fde_loss=2.255662 | kl_loss=0.000050 | l2_loss=2.335207 | smooth_loss=0.069355 | total_loss=5.946283 | vel_loss=0.035690 | weighted_ade=2.173473 | LR=1.88e-03
+2026-03-05 17:24:36,269 - INFO - [Epoch 57/300] ade=1.981198 | ade_loss=1.981198 | fde=2.080359 | fde_loss=2.080359 | kl_loss=0.000119 | l2_loss=1.961901 | smooth_loss=0.069920 | total_loss=5.319562 | vel_loss=0.035061 | weighted_ade=1.997423 | LR=1.88e-03
+2026-03-05 17:24:36,360 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.981198m
+2026-03-05 17:25:16,841 - INFO - [Epoch 58/300] ade=2.174358 | ade_loss=2.174358 | fde=2.269351 | fde_loss=2.269351 | kl_loss=0.000041 | l2_loss=2.351261 | smooth_loss=0.068380 | total_loss=6.010716 | vel_loss=0.034900 | weighted_ade=2.189771 | LR=1.87e-03
+2026-03-05 17:25:57,330 - INFO - [Epoch 59/300] ade=1.959081 | ade_loss=1.959081 | fde=2.058282 | fde_loss=2.058282 | kl_loss=0.000140 | l2_loss=1.898798 | smooth_loss=0.068716 | total_loss=5.246755 | vel_loss=0.034434 | weighted_ade=1.975313 | LR=1.87e-03
+2026-03-05 17:25:57,414 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.959081m
+2026-03-05 17:26:37,862 - INFO - [Epoch 60/300] ade=1.877503 | ade_loss=1.877503 | fde=1.975183 | fde_loss=1.975183 | kl_loss=0.000248 | l2_loss=1.752583 | smooth_loss=0.067914 | total_loss=4.983300 | vel_loss=0.034032 | weighted_ade=1.893623 | LR=1.86e-03
+2026-03-05 17:26:37,946 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.877503m
+2026-03-05 17:26:38,051 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 60)
+2026-03-05 17:27:18,491 - INFO - [Epoch 61/300] ade=2.161011 | ade_loss=2.161011 | fde=2.253260 | fde_loss=2.253260 | kl_loss=0.000048 | l2_loss=2.315953 | smooth_loss=0.067202 | total_loss=5.989103 | vel_loss=0.033897 | weighted_ade=2.176076 | LR=1.86e-03
+2026-03-05 17:27:58,925 - INFO - [Epoch 62/300] ade=2.025397 | ade_loss=2.025397 | fde=2.123310 | fde_loss=2.123310 | kl_loss=0.000170 | l2_loss=2.077454 | smooth_loss=0.067877 | total_loss=5.553396 | vel_loss=0.034303 | weighted_ade=2.041512 | LR=1.85e-03
+2026-03-05 17:28:39,363 - INFO - [Epoch 63/300] ade=2.020595 | ade_loss=2.020595 | fde=2.114922 | fde_loss=2.114922 | kl_loss=0.000106 | l2_loss=2.013610 | smooth_loss=0.067963 | total_loss=5.499301 | vel_loss=0.034007 | weighted_ade=2.036217 | LR=1.85e-03
+2026-03-05 17:29:19,826 - INFO - [Epoch 64/300] ade=2.216176 | ade_loss=2.216176 | fde=2.313193 | fde_loss=2.313193 | kl_loss=0.000261 | l2_loss=2.604886 | smooth_loss=0.069615 | total_loss=6.377048 | vel_loss=0.035412 | weighted_ade=2.232153 | LR=1.84e-03
+2026-03-05 17:30:00,287 - INFO - [Epoch 65/300] ade=1.994142 | ade_loss=1.994142 | fde=2.089317 | fde_loss=2.089317 | kl_loss=0.000084 | l2_loss=1.985041 | smooth_loss=0.067064 | total_loss=5.450270 | vel_loss=0.033670 | weighted_ade=2.009957 | LR=1.83e-03
+2026-03-05 17:30:40,791 - INFO - [Epoch 66/300] ade=2.060137 | ade_loss=2.060137 | fde=2.156316 | fde_loss=2.156316 | kl_loss=0.000201 | l2_loss=2.187430 | smooth_loss=0.069467 | total_loss=5.757632 | vel_loss=0.035095 | weighted_ade=2.076026 | LR=1.83e-03
+2026-03-05 17:31:21,281 - INFO - [Epoch 67/300] ade=1.915778 | ade_loss=1.915778 | fde=2.012009 | fde_loss=2.012009 | kl_loss=0.000050 | l2_loss=1.817070 | smooth_loss=0.066380 | total_loss=5.186821 | vel_loss=0.033381 | weighted_ade=1.931759 | LR=1.82e-03
+2026-03-05 17:32:01,733 - INFO - [Epoch 68/300] ade=2.078108 | ade_loss=2.078108 | fde=2.169437 | fde_loss=2.169437 | kl_loss=0.000042 | l2_loss=2.146595 | smooth_loss=0.067528 | total_loss=5.777349 | vel_loss=0.033671 | weighted_ade=2.093195 | LR=1.82e-03
+2026-03-05 17:32:42,195 - INFO - [Epoch 69/300] ade=1.894911 | ade_loss=1.894911 | fde=1.989655 | fde_loss=1.989655 | kl_loss=0.000075 | l2_loss=1.759190 | smooth_loss=0.065987 | total_loss=5.121834 | vel_loss=0.032958 | weighted_ade=1.910604 | LR=1.81e-03
+2026-03-05 17:33:22,675 - INFO - [Epoch 70/300] ade=1.863421 | ade_loss=1.863421 | fde=1.958905 | fde_loss=1.958905 | kl_loss=0.000197 | l2_loss=1.700227 | smooth_loss=0.065428 | total_loss=5.025398 | vel_loss=0.032325 | weighted_ade=1.879228 | LR=1.80e-03
+2026-03-05 17:33:22,763 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.863421m
+2026-03-05 17:34:03,235 - INFO - [Epoch 71/300] ade=2.249102 | ade_loss=2.249102 | fde=2.339399 | fde_loss=2.339399 | kl_loss=0.000105 | l2_loss=2.664756 | smooth_loss=0.068258 | total_loss=6.572714 | vel_loss=0.034607 | weighted_ade=2.263961 | LR=1.80e-03
+2026-03-05 17:34:43,676 - INFO - [Epoch 72/300] ade=1.916709 | ade_loss=1.916709 | fde=2.009584 | fde_loss=2.009584 | kl_loss=0.000009 | l2_loss=1.800145 | smooth_loss=0.066392 | total_loss=5.233131 | vel_loss=0.032986 | weighted_ade=1.932241 | LR=1.79e-03
+2026-03-05 17:35:24,112 - INFO - [Epoch 73/300] ade=1.904815 | ade_loss=1.904815 | fde=1.997668 | fde_loss=1.997668 | kl_loss=0.000317 | l2_loss=1.778200 | smooth_loss=0.066901 | total_loss=5.204850 | vel_loss=0.033041 | weighted_ade=1.920145 | LR=1.78e-03
+2026-03-05 17:36:04,557 - INFO - [Epoch 74/300] ade=1.812776 | ade_loss=1.812776 | fde=1.906377 | fde_loss=1.906377 | kl_loss=0.000096 | l2_loss=1.595344 | smooth_loss=0.065704 | total_loss=4.889164 | vel_loss=0.032261 | weighted_ade=1.828133 | LR=1.78e-03
+2026-03-05 17:36:04,641 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.812776m
+2026-03-05 17:36:45,072 - INFO - [Epoch 75/300] ade=1.956858 | ade_loss=1.956858 | fde=2.046637 | fde_loss=2.046637 | kl_loss=0.000212 | l2_loss=1.859092 | smooth_loss=0.063694 | total_loss=5.394449 | vel_loss=0.031712 | weighted_ade=1.971530 | LR=1.77e-03
+2026-03-05 17:37:25,494 - INFO - [Epoch 76/300] ade=1.783746 | ade_loss=1.783746 | fde=1.876244 | fde_loss=1.876244 | kl_loss=0.000105 | l2_loss=1.543761 | smooth_loss=0.065275 | total_loss=4.814356 | vel_loss=0.032014 | weighted_ade=1.799054 | LR=1.76e-03
+2026-03-05 17:37:25,575 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.783746m
+2026-03-05 17:38:06,007 - INFO - [Epoch 77/300] ade=2.026236 | ade_loss=2.026236 | fde=2.116433 | fde_loss=2.116433 | kl_loss=0.000048 | l2_loss=2.030284 | smooth_loss=0.067466 | total_loss=5.698163 | vel_loss=0.033247 | weighted_ade=2.041182 | LR=1.76e-03
+2026-03-05 17:38:46,470 - INFO - [Epoch 78/300] ade=1.793588 | ade_loss=1.793588 | fde=1.886053 | fde_loss=1.886053 | kl_loss=0.000117 | l2_loss=1.553886 | smooth_loss=0.064434 | total_loss=4.866652 | vel_loss=0.031572 | weighted_ade=1.808878 | LR=1.75e-03
+2026-03-05 17:39:26,933 - INFO - [Epoch 79/300] ade=1.846401 | ade_loss=1.846401 | fde=1.936103 | fde_loss=1.936103 | kl_loss=0.000032 | l2_loss=1.643235 | smooth_loss=0.066859 | total_loss=5.055033 | vel_loss=0.032386 | weighted_ade=1.861076 | LR=1.74e-03
+2026-03-05 17:40:07,380 - INFO - [Epoch 80/300] ade=1.967874 | ade_loss=1.967874 | fde=2.056009 | fde_loss=2.056009 | kl_loss=0.000107 | l2_loss=1.931564 | smooth_loss=0.066203 | total_loss=5.541700 | vel_loss=0.032413 | weighted_ade=1.982421 | LR=1.73e-03
+2026-03-05 17:40:07,462 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 80)
+2026-03-05 17:40:47,921 - INFO - [Epoch 81/300] ade=1.816722 | ade_loss=1.816722 | fde=1.909823 | fde_loss=1.909823 | kl_loss=0.000057 | l2_loss=1.620607 | smooth_loss=0.065924 | total_loss=5.006244 | vel_loss=0.032186 | weighted_ade=1.832204 | LR=1.73e-03
+2026-03-05 17:41:28,370 - INFO - [Epoch 82/300] ade=2.080166 | ade_loss=2.080166 | fde=2.166427 | fde_loss=2.166427 | kl_loss=0.000069 | l2_loss=2.175903 | smooth_loss=0.068961 | total_loss=5.990368 | vel_loss=0.033626 | weighted_ade=2.094308 | LR=1.72e-03
+2026-03-05 17:42:08,840 - INFO - [Epoch 83/300] ade=1.894054 | ade_loss=1.894054 | fde=1.982470 | fde_loss=1.982470 | kl_loss=0.000205 | l2_loss=1.770499 | smooth_loss=0.066243 | total_loss=5.305203 | vel_loss=0.032105 | weighted_ade=1.908640 | LR=1.71e-03
+2026-03-05 17:42:49,303 - INFO - [Epoch 84/300] ade=1.741194 | ade_loss=1.741194 | fde=1.833208 | fde_loss=1.833208 | kl_loss=0.000008 | l2_loss=1.457090 | smooth_loss=0.066042 | total_loss=4.761514 | vel_loss=0.031902 | weighted_ade=1.756274 | LR=1.70e-03
+2026-03-05 17:42:49,391 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.741194m
+2026-03-05 17:43:29,833 - INFO - [Epoch 85/300] ade=1.937054 | ade_loss=1.937054 | fde=2.025691 | fde_loss=2.025691 | kl_loss=0.000047 | l2_loss=1.830291 | smooth_loss=0.066426 | total_loss=5.467741 | vel_loss=0.032300 | weighted_ade=1.951564 | LR=1.70e-03
+2026-03-05 17:44:10,340 - INFO - [Epoch 86/300] ade=1.753645 | ade_loss=1.753645 | fde=1.843536 | fde_loss=1.843536 | kl_loss=0.000057 | l2_loss=1.487089 | smooth_loss=0.064715 | total_loss=4.835144 | vel_loss=0.031317 | weighted_ade=1.768444 | LR=1.69e-03
+2026-03-05 17:44:50,790 - INFO - [Epoch 87/300] ade=1.837767 | ade_loss=1.837767 | fde=1.921718 | fde_loss=1.921718 | kl_loss=0.000225 | l2_loss=1.618687 | smooth_loss=0.064835 | total_loss=5.120708 | vel_loss=0.030959 | weighted_ade=1.851475 | LR=1.68e-03
+2026-03-05 17:45:31,245 - INFO - [Epoch 88/300] ade=1.792764 | ade_loss=1.792764 | fde=1.880029 | fde_loss=1.880029 | kl_loss=0.000100 | l2_loss=1.532974 | smooth_loss=0.064293 | total_loss=4.976463 | vel_loss=0.030948 | weighted_ade=1.807186 | LR=1.67e-03
+2026-03-05 17:46:11,714 - INFO - [Epoch 89/300] ade=1.786197 | ade_loss=1.786197 | fde=1.873229 | fde_loss=1.873229 | kl_loss=0.000057 | l2_loss=1.564160 | smooth_loss=0.063484 | total_loss=5.001077 | vel_loss=0.030490 | weighted_ade=1.800470 | LR=1.66e-03
+2026-03-05 17:46:52,178 - INFO - [Epoch 90/300] ade=1.755984 | ade_loss=1.755984 | fde=1.841798 | fde_loss=1.841798 | kl_loss=0.000016 | l2_loss=1.474297 | smooth_loss=0.063903 | total_loss=4.880430 | vel_loss=0.030484 | weighted_ade=1.769931 | LR=1.66e-03
+2026-03-05 17:47:32,628 - INFO - [Epoch 91/300] ade=1.712953 | ade_loss=1.712953 | fde=1.798529 | fde_loss=1.798529 | kl_loss=0.000116 | l2_loss=1.389913 | smooth_loss=0.064851 | total_loss=4.738344 | vel_loss=0.030614 | weighted_ade=1.726972 | LR=1.65e-03
+2026-03-05 17:47:32,713 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.712953m
+2026-03-05 17:48:13,204 - INFO - [Epoch 92/300] ade=1.706254 | ade_loss=1.706254 | fde=1.791781 | fde_loss=1.791781 | kl_loss=0.000075 | l2_loss=1.374251 | smooth_loss=0.063928 | total_loss=4.725353 | vel_loss=0.030389 | weighted_ade=1.720184 | LR=1.64e-03
+2026-03-05 17:48:13,287 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.706254m
+2026-03-05 17:48:53,745 - INFO - [Epoch 93/300] ade=1.976847 | ade_loss=1.976847 | fde=2.061814 | fde_loss=2.061814 | kl_loss=0.000097 | l2_loss=2.049858 | smooth_loss=0.068355 | total_loss=5.837481 | vel_loss=0.032922 | weighted_ade=1.990847 | LR=1.63e-03
+2026-03-05 17:49:34,158 - INFO - [Epoch 94/300] ade=1.691865 | ade_loss=1.691865 | fde=1.780935 | fde_loss=1.780935 | kl_loss=0.000165 | l2_loss=1.369393 | smooth_loss=0.064439 | total_loss=4.721645 | vel_loss=0.030758 | weighted_ade=1.706422 | LR=1.62e-03
+2026-03-05 17:49:34,242 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.691865m
+2026-03-05 17:50:14,654 - INFO - [Epoch 95/300] ade=1.772450 | ade_loss=1.772450 | fde=1.854153 | fde_loss=1.854153 | kl_loss=0.000162 | l2_loss=1.499157 | smooth_loss=0.063402 | total_loss=5.001060 | vel_loss=0.029978 | weighted_ade=1.785719 | LR=1.61e-03
+2026-03-05 17:50:55,096 - INFO - [Epoch 96/300] ade=1.722418 | ade_loss=1.722418 | fde=1.804385 | fde_loss=1.804385 | kl_loss=0.000094 | l2_loss=1.412146 | smooth_loss=0.063585 | total_loss=4.841657 | vel_loss=0.029975 | weighted_ade=1.735795 | LR=1.61e-03
+2026-03-05 17:51:35,527 - INFO - [Epoch 97/300] ade=1.675356 | ade_loss=1.675356 | fde=1.759282 | fde_loss=1.759282 | kl_loss=0.000042 | l2_loss=1.319296 | smooth_loss=0.062089 | total_loss=4.684324 | vel_loss=0.029351 | weighted_ade=1.689202 | LR=1.60e-03
+2026-03-05 17:51:35,623 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.675356m
+2026-03-05 17:52:16,074 - INFO - [Epoch 98/300] ade=1.745605 | ade_loss=1.745605 | fde=1.825754 | fde_loss=1.825754 | kl_loss=0.000016 | l2_loss=1.447839 | smooth_loss=0.062631 | total_loss=4.945567 | vel_loss=0.029499 | weighted_ade=1.758711 | LR=1.59e-03
+2026-03-05 17:52:56,491 - INFO - [Epoch 99/300] ade=1.656197 | ade_loss=1.656197 | fde=1.738932 | fde_loss=1.738932 | kl_loss=0.000021 | l2_loss=1.280142 | smooth_loss=0.062037 | total_loss=4.639924 | vel_loss=0.029124 | weighted_ade=1.669552 | LR=1.58e-03
+2026-03-05 17:52:56,575 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.656197m
+2026-03-05 17:53:36,985 - INFO - [Epoch 100/300] ade=1.838522 | ade_loss=1.838522 | fde=1.918187 | fde_loss=1.918187 | kl_loss=0.000029 | l2_loss=1.619118 | smooth_loss=0.063118 | total_loss=5.307062 | vel_loss=0.029646 | weighted_ade=1.851399 | LR=1.57e-03
+2026-03-05 17:53:37,071 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 100)
+2026-03-05 17:54:17,503 - INFO - [Epoch 101/300] ade=1.725176 | ade_loss=1.725176 | fde=1.805206 | fde_loss=1.805206 | kl_loss=0.000131 | l2_loss=1.422444 | smooth_loss=0.063037 | total_loss=4.925315 | vel_loss=0.029435 | weighted_ade=1.738171 | LR=1.56e-03
+2026-03-05 17:54:57,959 - INFO - [Epoch 102/300] ade=1.659628 | ade_loss=1.659628 | fde=1.741272 | fde_loss=1.741272 | kl_loss=0.000039 | l2_loss=1.294761 | smooth_loss=0.062354 | total_loss=4.700176 | vel_loss=0.028977 | weighted_ade=1.672853 | LR=1.55e-03
+2026-03-05 17:55:38,426 - INFO - [Epoch 103/300] ade=1.633773 | ade_loss=1.633773 | fde=1.712864 | fde_loss=1.712864 | kl_loss=0.000098 | l2_loss=1.249642 | smooth_loss=0.061276 | total_loss=4.620968 | vel_loss=0.028612 | weighted_ade=1.646649 | LR=1.54e-03
+2026-03-05 17:55:38,510 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.633773m
+2026-03-05 17:56:18,949 - INFO - [Epoch 104/300] ade=1.670033 | ade_loss=1.670033 | fde=1.751400 | fde_loss=1.751400 | kl_loss=0.000021 | l2_loss=1.305230 | smooth_loss=0.061595 | total_loss=4.759231 | vel_loss=0.028511 | weighted_ade=1.683217 | LR=1.53e-03
+2026-03-05 17:56:59,388 - INFO - [Epoch 105/300] ade=1.751794 | ade_loss=1.751794 | fde=1.830043 | fde_loss=1.830043 | kl_loss=0.000040 | l2_loss=1.453723 | smooth_loss=0.062240 | total_loss=5.065019 | vel_loss=0.029051 | weighted_ade=1.764531 | LR=1.52e-03
+2026-03-05 17:57:39,805 - INFO - [Epoch 106/300] ade=1.670645 | ade_loss=1.670645 | fde=1.749730 | fde_loss=1.749730 | kl_loss=0.000005 | l2_loss=1.305531 | smooth_loss=0.061927 | total_loss=4.788261 | vel_loss=0.028745 | weighted_ade=1.683462 | LR=1.52e-03
+2026-03-05 17:58:20,265 - INFO - [Epoch 107/300] ade=1.854814 | ade_loss=1.854814 | fde=1.932129 | fde_loss=1.932129 | kl_loss=0.000045 | l2_loss=1.736134 | smooth_loss=0.063436 | total_loss=5.537830 | vel_loss=0.029837 | weighted_ade=1.867434 | LR=1.51e-03
+2026-03-05 17:59:00,737 - INFO - [Epoch 108/300] ade=1.657590 | ade_loss=1.657590 | fde=1.739446 | fde_loss=1.739446 | kl_loss=0.000085 | l2_loss=1.308331 | smooth_loss=0.061915 | total_loss=4.792811 | vel_loss=0.028772 | weighted_ade=1.670923 | LR=1.50e-03
+2026-03-05 17:59:41,183 - INFO - [Epoch 109/300] ade=1.666814 | ade_loss=1.666814 | fde=1.745071 | fde_loss=1.745071 | kl_loss=0.000020 | l2_loss=1.306170 | smooth_loss=0.061448 | total_loss=4.823605 | vel_loss=0.028479 | weighted_ade=1.679601 | LR=1.49e-03
+2026-03-05 18:00:21,604 - INFO - [Epoch 110/300] ade=1.633952 | ade_loss=1.633952 | fde=1.712733 | fde_loss=1.712733 | kl_loss=0.000145 | l2_loss=1.248419 | smooth_loss=0.060980 | total_loss=4.721219 | vel_loss=0.028082 | weighted_ade=1.646714 | LR=1.48e-03
+2026-03-05 18:01:02,057 - INFO - [Epoch 111/300] ade=1.700697 | ade_loss=1.700697 | fde=1.776467 | fde_loss=1.776467 | kl_loss=0.000254 | l2_loss=1.369626 | smooth_loss=0.060864 | total_loss=4.975537 | vel_loss=0.028062 | weighted_ade=1.712969 | LR=1.47e-03
+2026-03-05 18:01:42,478 - INFO - [Epoch 112/300] ade=1.625644 | ade_loss=1.625644 | fde=1.703484 | fde_loss=1.703484 | kl_loss=0.000109 | l2_loss=1.231240 | smooth_loss=0.060089 | total_loss=4.718029 | vel_loss=0.027778 | weighted_ade=1.638226 | LR=1.46e-03
+2026-03-05 18:01:42,566 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.625644m
+2026-03-05 18:02:23,036 - INFO - [Epoch 113/300] ade=1.691259 | ade_loss=1.691259 | fde=1.768309 | fde_loss=1.768309 | kl_loss=0.000035 | l2_loss=1.352071 | smooth_loss=0.059921 | total_loss=4.972236 | vel_loss=0.027546 | weighted_ade=1.703812 | LR=1.45e-03
+2026-03-05 18:03:03,473 - INFO - [Epoch 114/300] ade=1.601957 | ade_loss=1.601957 | fde=1.678369 | fde_loss=1.678369 | kl_loss=0.000039 | l2_loss=1.186801 | smooth_loss=0.060180 | total_loss=4.659257 | vel_loss=0.027536 | weighted_ade=1.614399 | LR=1.44e-03
+2026-03-05 18:03:03,558 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.601957m
+2026-03-05 18:03:43,966 - INFO - [Epoch 115/300] ade=1.603019 | ade_loss=1.603019 | fde=1.678693 | fde_loss=1.678693 | kl_loss=0.000027 | l2_loss=1.192319 | smooth_loss=0.060623 | total_loss=4.680188 | vel_loss=0.027719 | weighted_ade=1.615227 | LR=1.43e-03
+2026-03-05 18:04:24,393 - INFO - [Epoch 116/300] ade=1.610516 | ade_loss=1.610516 | fde=1.685448 | fde_loss=1.685448 | kl_loss=0.000054 | l2_loss=1.193792 | smooth_loss=0.058509 | total_loss=4.712320 | vel_loss=0.026947 | weighted_ade=1.622571 | LR=1.42e-03
+2026-03-05 18:05:04,798 - INFO - [Epoch 117/300] ade=1.632509 | ade_loss=1.632509 | fde=1.707500 | fde_loss=1.707500 | kl_loss=0.000012 | l2_loss=1.241906 | smooth_loss=0.058747 | total_loss=4.814134 | vel_loss=0.026853 | weighted_ade=1.644619 | LR=1.41e-03
+2026-03-05 18:05:45,223 - INFO - [Epoch 118/300] ade=1.643239 | ade_loss=1.643239 | fde=1.718424 | fde_loss=1.718424 | kl_loss=0.000032 | l2_loss=1.268876 | smooth_loss=0.058736 | total_loss=4.874467 | vel_loss=0.026888 | weighted_ade=1.655385 | LR=1.40e-03
+2026-03-05 18:06:25,643 - INFO - [Epoch 119/300] ade=1.675448 | ade_loss=1.675448 | fde=1.748914 | fde_loss=1.748914 | kl_loss=0.000043 | l2_loss=1.308243 | smooth_loss=0.059486 | total_loss=4.993343 | vel_loss=0.027236 | weighted_ade=1.687247 | LR=1.39e-03
+2026-03-05 18:07:06,055 - INFO - [Epoch 120/300] ade=1.654395 | ade_loss=1.654395 | fde=1.730503 | fde_loss=1.730503 | kl_loss=0.000079 | l2_loss=1.298808 | smooth_loss=0.060147 | total_loss=4.954875 | vel_loss=0.027555 | weighted_ade=1.666674 | LR=1.38e-03
+2026-03-05 18:07:06,138 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 120)
+2026-03-05 18:07:46,572 - INFO - [Epoch 121/300] ade=1.598063 | ade_loss=1.598063 | fde=1.672896 | fde_loss=1.672896 | kl_loss=0.000049 | l2_loss=1.184618 | smooth_loss=0.059402 | total_loss=4.752546 | vel_loss=0.027195 | weighted_ade=1.610049 | LR=1.37e-03
+2026-03-05 18:07:46,660 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.598063m
+2026-03-05 18:08:27,129 - INFO - [Epoch 122/300] ade=1.566379 | ade_loss=1.566379 | fde=1.641939 | fde_loss=1.641939 | kl_loss=0.000082 | l2_loss=1.126356 | smooth_loss=0.058623 | total_loss=4.650526 | vel_loss=0.026742 | weighted_ade=1.578522 | LR=1.36e-03
+2026-03-05 18:08:27,216 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.566379m
+2026-03-05 18:09:07,701 - INFO - [Epoch 123/300] ade=1.558276 | ade_loss=1.558276 | fde=1.634568 | fde_loss=1.634568 | kl_loss=0.000095 | l2_loss=1.116962 | smooth_loss=0.058086 | total_loss=4.639980 | vel_loss=0.026433 | weighted_ade=1.570458 | LR=1.35e-03
+2026-03-05 18:09:07,783 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.558276m
+2026-03-05 18:09:48,250 - INFO - [Epoch 124/300] ade=1.667536 | ade_loss=1.667536 | fde=1.741274 | fde_loss=1.741274 | kl_loss=0.000048 | l2_loss=1.302876 | smooth_loss=0.058533 | total_loss=5.049948 | vel_loss=0.026668 | weighted_ade=1.679465 | LR=1.34e-03
+2026-03-05 18:10:28,700 - INFO - [Epoch 125/300] ade=1.592728 | ade_loss=1.592728 | fde=1.669294 | fde_loss=1.669294 | kl_loss=0.000020 | l2_loss=1.172500 | smooth_loss=0.057279 | total_loss=4.793710 | vel_loss=0.026414 | weighted_ade=1.604916 | LR=1.33e-03
+2026-03-05 18:11:09,191 - INFO - [Epoch 126/300] ade=1.645136 | ade_loss=1.645136 | fde=1.718745 | fde_loss=1.718745 | kl_loss=0.000029 | l2_loss=1.262769 | smooth_loss=0.058149 | total_loss=4.998875 | vel_loss=0.026613 | weighted_ade=1.656985 | LR=1.32e-03
+2026-03-05 18:11:49,672 - INFO - [Epoch 127/300] ade=1.549587 | ade_loss=1.549587 | fde=1.623631 | fde_loss=1.623631 | kl_loss=0.000007 | l2_loss=1.102657 | smooth_loss=0.057639 | total_loss=4.667754 | vel_loss=0.026107 | weighted_ade=1.561354 | LR=1.31e-03
+2026-03-05 18:11:49,756 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.549587m
+2026-03-05 18:12:30,227 - INFO - [Epoch 128/300] ade=1.571830 | ade_loss=1.571830 | fde=1.646266 | fde_loss=1.646266 | kl_loss=0.000133 | l2_loss=1.135074 | smooth_loss=0.057551 | total_loss=4.761175 | vel_loss=0.026285 | weighted_ade=1.583739 | LR=1.30e-03
+2026-03-05 18:13:10,727 - INFO - [Epoch 129/300] ade=1.620812 | ade_loss=1.620812 | fde=1.693342 | fde_loss=1.693342 | kl_loss=0.000051 | l2_loss=1.207774 | smooth_loss=0.057476 | total_loss=4.947340 | vel_loss=0.026244 | weighted_ade=1.632387 | LR=1.29e-03
+2026-03-05 18:13:51,150 - INFO - [Epoch 130/300] ade=1.642656 | ade_loss=1.642656 | fde=1.717077 | fde_loss=1.717077 | kl_loss=0.000036 | l2_loss=1.259826 | smooth_loss=0.058663 | total_loss=5.056397 | vel_loss=0.026789 | weighted_ade=1.654602 | LR=1.28e-03
+2026-03-05 18:14:31,598 - INFO - [Epoch 131/300] ade=1.609979 | ade_loss=1.609979 | fde=1.682860 | fde_loss=1.682860 | kl_loss=0.000110 | l2_loss=1.196349 | smooth_loss=0.057805 | total_loss=4.945154 | vel_loss=0.026358 | weighted_ade=1.621573 | LR=1.27e-03
+2026-03-05 18:15:12,056 - INFO - [Epoch 132/300] ade=1.568362 | ade_loss=1.568362 | fde=1.643009 | fde_loss=1.643009 | kl_loss=0.000069 | l2_loss=1.140741 | smooth_loss=0.058016 | total_loss=4.820033 | vel_loss=0.026551 | weighted_ade=1.580279 | LR=1.26e-03
+2026-03-05 18:15:52,504 - INFO - [Epoch 133/300] ade=1.575085 | ade_loss=1.575085 | fde=1.648884 | fde_loss=1.648884 | kl_loss=0.000029 | l2_loss=1.152244 | smooth_loss=0.057142 | total_loss=4.859743 | vel_loss=0.026023 | weighted_ade=1.586890 | LR=1.25e-03
+2026-03-05 18:16:32,965 - INFO - [Epoch 134/300] ade=1.550062 | ade_loss=1.550062 | fde=1.622388 | fde_loss=1.622388 | kl_loss=0.000018 | l2_loss=1.097068 | smooth_loss=0.057382 | total_loss=4.773053 | vel_loss=0.026064 | weighted_ade=1.561519 | LR=1.24e-03
+2026-03-05 18:17:13,407 - INFO - [Epoch 135/300] ade=1.576407 | ade_loss=1.576407 | fde=1.648461 | fde_loss=1.648461 | kl_loss=0.000036 | l2_loss=1.137745 | smooth_loss=0.056356 | total_loss=4.883380 | vel_loss=0.025752 | weighted_ade=1.587959 | LR=1.23e-03
+2026-03-05 18:17:53,814 - INFO - [Epoch 136/300] ade=1.570786 | ade_loss=1.570786 | fde=1.642579 | fde_loss=1.642579 | kl_loss=0.000012 | l2_loss=1.131786 | smooth_loss=0.056282 | total_loss=4.880876 | vel_loss=0.025632 | weighted_ade=1.582104 | LR=1.21e-03
+2026-03-05 18:18:34,227 - INFO - [Epoch 137/300] ade=1.545174 | ade_loss=1.545174 | fde=1.617926 | fde_loss=1.617926 | kl_loss=0.000029 | l2_loss=1.096271 | smooth_loss=0.056239 | total_loss=4.808000 | vel_loss=0.025543 | weighted_ade=1.556682 | LR=1.20e-03
+2026-03-05 18:18:34,312 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.545174m
+2026-03-05 18:19:14,757 - INFO - [Epoch 138/300] ade=1.542212 | ade_loss=1.542212 | fde=1.615321 | fde_loss=1.615321 | kl_loss=0.000074 | l2_loss=1.092544 | smooth_loss=0.057328 | total_loss=4.814670 | vel_loss=0.025864 | weighted_ade=1.553878 | LR=1.19e-03
+2026-03-05 18:19:14,839 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.542212m
+2026-03-05 18:19:55,263 - INFO - [Epoch 139/300] ade=1.544738 | ade_loss=1.544738 | fde=1.616747 | fde_loss=1.616747 | kl_loss=0.000048 | l2_loss=1.090268 | smooth_loss=0.057951 | total_loss=4.834984 | vel_loss=0.025990 | weighted_ade=1.556215 | LR=1.18e-03
+2026-03-05 18:20:35,669 - INFO - [Epoch 140/300] ade=1.577470 | ade_loss=1.577470 | fde=1.648442 | fde_loss=1.648442 | kl_loss=0.000029 | l2_loss=1.129888 | smooth_loss=0.057646 | total_loss=4.962105 | vel_loss=0.025852 | weighted_ade=1.588695 | LR=1.17e-03
+2026-03-05 18:20:35,755 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 140)
+2026-03-05 18:21:16,160 - INFO - [Epoch 141/300] ade=1.517086 | ade_loss=1.517086 | fde=1.589601 | fde_loss=1.589601 | kl_loss=0.000024 | l2_loss=1.051239 | smooth_loss=0.056790 | total_loss=4.769001 | vel_loss=0.025637 | weighted_ade=1.528527 | LR=1.16e-03
+2026-03-05 18:21:16,243 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.517086m
+2026-03-05 18:21:56,664 - INFO - [Epoch 142/300] ade=1.519981 | ade_loss=1.519981 | fde=1.592019 | fde_loss=1.592019 | kl_loss=0.000016 | l2_loss=1.050056 | smooth_loss=0.057052 | total_loss=4.791571 | vel_loss=0.025546 | weighted_ade=1.531364 | LR=1.15e-03
+2026-03-05 18:22:37,091 - INFO - [Epoch 143/300] ade=1.502165 | ade_loss=1.502165 | fde=1.574038 | fde_loss=1.574038 | kl_loss=0.000007 | l2_loss=1.017804 | smooth_loss=0.056282 | total_loss=4.738772 | vel_loss=0.025313 | weighted_ade=1.513583 | LR=1.14e-03
+2026-03-05 18:22:37,177 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.502165m
+2026-03-05 18:23:17,603 - INFO - [Epoch 144/300] ade=1.513550 | ade_loss=1.513550 | fde=1.585628 | fde_loss=1.585628 | kl_loss=0.000015 | l2_loss=1.041705 | smooth_loss=0.055916 | total_loss=4.801124 | vel_loss=0.025180 | weighted_ade=1.525091 | LR=1.13e-03
+2026-03-05 18:23:58,022 - INFO - [Epoch 145/300] ade=1.633066 | ade_loss=1.633066 | fde=1.703414 | fde_loss=1.703414 | kl_loss=0.000056 | l2_loss=1.240907 | smooth_loss=0.056989 | total_loss=5.266787 | vel_loss=0.025680 | weighted_ade=1.644336 | LR=1.12e-03
+2026-03-05 18:24:38,442 - INFO - [Epoch 146/300] ade=1.535253 | ade_loss=1.535253 | fde=1.605761 | fde_loss=1.605761 | kl_loss=0.000147 | l2_loss=1.067570 | smooth_loss=0.055978 | total_loss=4.907466 | vel_loss=0.025190 | weighted_ade=1.546403 | LR=1.11e-03
+2026-03-05 18:25:18,872 - INFO - [Epoch 147/300] ade=1.521498 | ade_loss=1.521498 | fde=1.591185 | fde_loss=1.591185 | kl_loss=0.000026 | l2_loss=1.050879 | smooth_loss=0.056730 | total_loss=4.875594 | vel_loss=0.025537 | weighted_ade=1.532561 | LR=1.10e-03
+2026-03-05 18:25:59,316 - INFO - [Epoch 148/300] ade=1.543334 | ade_loss=1.543334 | fde=1.614509 | fde_loss=1.614509 | kl_loss=0.000035 | l2_loss=1.085913 | smooth_loss=0.055610 | total_loss=4.975221 | vel_loss=0.024983 | weighted_ade=1.554616 | LR=1.09e-03
+2026-03-05 18:26:39,741 - INFO - [Epoch 149/300] ade=1.494749 | ade_loss=1.494749 | fde=1.565763 | fde_loss=1.565763 | kl_loss=0.000078 | l2_loss=1.005736 | smooth_loss=0.055677 | total_loss=4.807628 | vel_loss=0.025011 | weighted_ade=1.506026 | LR=1.08e-03
+2026-03-05 18:26:39,826 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.494749m
+2026-03-05 18:27:20,272 - INFO - [Epoch 150/300] ade=1.541049 | ade_loss=1.541049 | fde=1.610137 | fde_loss=1.610137 | kl_loss=0.000020 | l2_loss=1.072101 | smooth_loss=0.055216 | total_loss=4.991422 | vel_loss=0.024798 | weighted_ade=1.551941 | LR=1.06e-03
+2026-03-05 18:28:00,712 - INFO - [Epoch 151/300] ade=1.500301 | ade_loss=1.500301 | fde=1.570865 | fde_loss=1.570865 | kl_loss=0.000003 | l2_loss=1.014183 | smooth_loss=0.055598 | total_loss=4.860860 | vel_loss=0.024982 | weighted_ade=1.511394 | LR=1.05e-03
+2026-03-05 18:28:41,150 - INFO - [Epoch 152/300] ade=1.495675 | ade_loss=1.495675 | fde=1.565210 | fde_loss=1.565210 | kl_loss=0.000093 | l2_loss=1.006845 | smooth_loss=0.054564 | total_loss=4.858561 | vel_loss=0.024401 | weighted_ade=1.506715 | LR=1.04e-03
+2026-03-05 18:29:21,600 - INFO - [Epoch 153/300] ade=1.516718 | ade_loss=1.516718 | fde=1.585063 | fde_loss=1.585063 | kl_loss=0.000018 | l2_loss=1.036252 | smooth_loss=0.055158 | total_loss=4.951343 | vel_loss=0.024722 | weighted_ade=1.527445 | LR=1.03e-03
+2026-03-05 18:30:02,038 - INFO - [Epoch 154/300] ade=1.515709 | ade_loss=1.515709 | fde=1.585601 | fde_loss=1.585601 | kl_loss=0.000048 | l2_loss=1.036659 | smooth_loss=0.055509 | total_loss=4.967485 | vel_loss=0.024836 | weighted_ade=1.526724 | LR=1.02e-03
+2026-03-05 18:30:42,486 - INFO - [Epoch 155/300] ade=1.489218 | ade_loss=1.489218 | fde=1.557913 | fde_loss=1.557913 | kl_loss=0.000007 | l2_loss=1.001027 | smooth_loss=0.055437 | total_loss=4.886499 | vel_loss=0.024621 | weighted_ade=1.499999 | LR=1.01e-03
+2026-03-05 18:30:42,571 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.489218m
+2026-03-05 18:31:22,998 - INFO - [Epoch 156/300] ade=1.500823 | ade_loss=1.500823 | fde=1.569902 | fde_loss=1.569902 | kl_loss=0.000091 | l2_loss=1.018088 | smooth_loss=0.054361 | total_loss=4.946664 | vel_loss=0.024278 | weighted_ade=1.511674 | LR=1.00e-03
+2026-03-05 18:32:03,376 - INFO - [Epoch 157/300] ade=1.466747 | ade_loss=1.466747 | fde=1.535465 | fde_loss=1.535465 | kl_loss=0.000034 | l2_loss=0.953319 | smooth_loss=0.054638 | total_loss=4.826321 | vel_loss=0.024379 | weighted_ade=1.477498 | LR=9.89e-04
+2026-03-05 18:32:03,456 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.466747m
+2026-03-05 18:32:43,869 - INFO - [Epoch 158/300] ade=1.517555 | ade_loss=1.517555 | fde=1.587469 | fde_loss=1.587469 | kl_loss=0.000061 | l2_loss=1.036314 | smooth_loss=0.054055 | total_loss=5.040248 | vel_loss=0.024274 | weighted_ade=1.528617 | LR=9.78e-04
+2026-03-05 18:33:24,270 - INFO - [Epoch 159/300] ade=1.477078 | ade_loss=1.477078 | fde=1.545331 | fde_loss=1.545331 | kl_loss=0.000052 | l2_loss=0.975256 | smooth_loss=0.054159 | total_loss=4.902333 | vel_loss=0.024116 | weighted_ade=1.487761 | LR=9.68e-04
+2026-03-05 18:34:04,662 - INFO - [Epoch 160/300] ade=1.489476 | ade_loss=1.489476 | fde=1.557015 | fde_loss=1.557015 | kl_loss=0.000010 | l2_loss=0.996254 | smooth_loss=0.054712 | total_loss=4.967271 | vel_loss=0.024341 | weighted_ade=1.500110 | LR=9.57e-04
+2026-03-05 18:34:04,747 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 160)
+2026-03-05 18:34:45,169 - INFO - [Epoch 161/300] ade=1.474817 | ade_loss=1.474817 | fde=1.542681 | fde_loss=1.542681 | kl_loss=0.000020 | l2_loss=0.966008 | smooth_loss=0.054731 | total_loss=4.923812 | vel_loss=0.024365 | weighted_ade=1.485431 | LR=9.46e-04
+2026-03-05 18:35:25,568 - INFO - [Epoch 162/300] ade=1.460416 | ade_loss=1.460416 | fde=1.528789 | fde_loss=1.528789 | kl_loss=0.000026 | l2_loss=0.948782 | smooth_loss=0.054408 | total_loss=4.889107 | vel_loss=0.024157 | weighted_ade=1.470982 | LR=9.35e-04
+2026-03-05 18:35:25,652 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.460416m
+2026-03-05 18:36:06,056 - INFO - [Epoch 163/300] ade=1.454188 | ade_loss=1.454188 | fde=1.522587 | fde_loss=1.522587 | kl_loss=0.000025 | l2_loss=0.938760 | smooth_loss=0.054347 | total_loss=4.881862 | vel_loss=0.024204 | weighted_ade=1.464904 | LR=9.24e-04
+2026-03-05 18:36:06,140 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.454188m
+2026-03-05 18:36:46,580 - INFO - [Epoch 164/300] ade=1.447018 | ade_loss=1.447018 | fde=1.515181 | fde_loss=1.515181 | kl_loss=0.000007 | l2_loss=0.924500 | smooth_loss=0.053413 | total_loss=4.868543 | vel_loss=0.023705 | weighted_ade=1.457580 | LR=9.13e-04
+2026-03-05 18:36:46,665 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.447018m
+2026-03-05 18:37:27,081 - INFO - [Epoch 165/300] ade=1.456837 | ade_loss=1.456837 | fde=1.523698 | fde_loss=1.523698 | kl_loss=0.000001 | l2_loss=0.939668 | smooth_loss=0.054121 | total_loss=4.922328 | vel_loss=0.023884 | weighted_ade=1.467277 | LR=9.03e-04
+2026-03-05 18:38:07,508 - INFO - [Epoch 166/300] ade=1.464873 | ade_loss=1.464873 | fde=1.531619 | fde_loss=1.531619 | kl_loss=0.000000 | l2_loss=0.955158 | smooth_loss=0.054153 | total_loss=4.972383 | vel_loss=0.023946 | weighted_ade=1.475313 | LR=8.92e-04
+2026-03-05 18:38:47,961 - INFO - [Epoch 167/300] ade=1.463343 | ade_loss=1.463343 | fde=1.528925 | fde_loss=1.528925 | kl_loss=0.000051 | l2_loss=0.946486 | smooth_loss=0.054035 | total_loss=4.978450 | vel_loss=0.023785 | weighted_ade=1.473539 | LR=8.81e-04
+2026-03-05 18:39:28,434 - INFO - [Epoch 168/300] ade=1.446286 | ade_loss=1.446286 | fde=1.512777 | fde_loss=1.512777 | kl_loss=0.000020 | l2_loss=0.923079 | smooth_loss=0.053861 | total_loss=4.932023 | vel_loss=0.023733 | weighted_ade=1.456643 | LR=8.70e-04
+2026-03-05 18:39:28,519 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.446286m
+2026-03-05 18:40:08,967 - INFO - [Epoch 169/300] ade=1.431065 | ade_loss=1.431065 | fde=1.496375 | fde_loss=1.496375 | kl_loss=0.000025 | l2_loss=0.899718 | smooth_loss=0.053422 | total_loss=4.888341 | vel_loss=0.023611 | weighted_ade=1.441168 | LR=8.60e-04
+2026-03-05 18:40:09,050 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.431065m
+2026-03-05 18:40:49,531 - INFO - [Epoch 170/300] ade=1.446235 | ade_loss=1.446235 | fde=1.511580 | fde_loss=1.511580 | kl_loss=0.000009 | l2_loss=0.917547 | smooth_loss=0.052773 | total_loss=4.961194 | vel_loss=0.023224 | weighted_ade=1.456367 | LR=8.49e-04
+2026-03-05 18:41:29,965 - INFO - [Epoch 171/300] ade=1.454778 | ade_loss=1.454778 | fde=1.519815 | fde_loss=1.519815 | kl_loss=0.000049 | l2_loss=0.934126 | smooth_loss=0.053209 | total_loss=5.013899 | vel_loss=0.023401 | weighted_ade=1.464855 | LR=8.38e-04
+2026-03-05 18:42:10,419 - INFO - [Epoch 172/300] ade=1.435320 | ade_loss=1.435320 | fde=1.501160 | fde_loss=1.501160 | kl_loss=0.000016 | l2_loss=0.910740 | smooth_loss=0.053540 | total_loss=4.959836 | vel_loss=0.023495 | weighted_ade=1.445559 | LR=8.28e-04
+2026-03-05 18:42:50,872 - INFO - [Epoch 173/300] ade=1.438010 | ade_loss=1.438010 | fde=1.501785 | fde_loss=1.501785 | kl_loss=0.000013 | l2_loss=0.907384 | smooth_loss=0.052932 | total_loss=4.980613 | vel_loss=0.023237 | weighted_ade=1.447838 | LR=8.17e-04
+2026-03-05 18:43:31,325 - INFO - [Epoch 174/300] ade=1.429205 | ade_loss=1.429205 | fde=1.493179 | fde_loss=1.493179 | kl_loss=0.000007 | l2_loss=0.893623 | smooth_loss=0.052393 | total_loss=4.963106 | vel_loss=0.023162 | weighted_ade=1.439100 | LR=8.06e-04
+2026-03-05 18:43:31,410 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.429205m
+2026-03-05 18:44:11,891 - INFO - [Epoch 175/300] ade=1.407597 | ade_loss=1.407597 | fde=1.471816 | fde_loss=1.471816 | kl_loss=0.000006 | l2_loss=0.863958 | smooth_loss=0.052420 | total_loss=4.897301 | vel_loss=0.023033 | weighted_ade=1.417527 | LR=7.96e-04
+2026-03-05 18:44:11,976 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.407597m
+2026-03-05 18:44:52,453 - INFO - [Epoch 176/300] ade=1.420181 | ade_loss=1.420181 | fde=1.484559 | fde_loss=1.484559 | kl_loss=0.000046 | l2_loss=0.885490 | smooth_loss=0.052239 | total_loss=4.965847 | vel_loss=0.023004 | weighted_ade=1.430088 | LR=7.85e-04
+2026-03-05 18:45:32,878 - INFO - [Epoch 177/300] ade=1.418224 | ade_loss=1.418224 | fde=1.481460 | fde_loss=1.481460 | kl_loss=0.000038 | l2_loss=0.880257 | smooth_loss=0.052893 | total_loss=4.973026 | vel_loss=0.023079 | weighted_ade=1.427964 | LR=7.74e-04
+2026-03-05 18:46:13,293 - INFO - [Epoch 178/300] ade=1.441739 | ade_loss=1.441739 | fde=1.504409 | fde_loss=1.504409 | kl_loss=0.000006 | l2_loss=0.906634 | smooth_loss=0.052654 | total_loss=5.077712 | vel_loss=0.022991 | weighted_ade=1.451351 | LR=7.64e-04
+2026-03-05 18:46:53,719 - INFO - [Epoch 179/300] ade=1.433165 | ade_loss=1.433165 | fde=1.496555 | fde_loss=1.496555 | kl_loss=0.000003 | l2_loss=0.902847 | smooth_loss=0.052710 | total_loss=5.067499 | vel_loss=0.022940 | weighted_ade=1.442957 | LR=7.53e-04
+2026-03-05 18:47:34,122 - INFO - [Epoch 180/300] ade=1.421211 | ade_loss=1.421211 | fde=1.483945 | fde_loss=1.483945 | kl_loss=0.000011 | l2_loss=0.886076 | smooth_loss=0.052400 | total_loss=5.037274 | vel_loss=0.022895 | weighted_ade=1.430939 | LR=7.43e-04
+2026-03-05 18:47:34,208 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 180)
+2026-03-05 18:48:14,600 - INFO - [Epoch 181/300] ade=1.408720 | ade_loss=1.408720 | fde=1.471843 | fde_loss=1.471843 | kl_loss=0.000018 | l2_loss=0.864349 | smooth_loss=0.052124 | total_loss=5.003542 | vel_loss=0.022677 | weighted_ade=1.418444 | LR=7.32e-04
+2026-03-05 18:48:55,038 - INFO - [Epoch 182/300] ade=1.424331 | ade_loss=1.424331 | fde=1.486887 | fde_loss=1.486887 | kl_loss=0.000031 | l2_loss=0.883753 | smooth_loss=0.052146 | total_loss=5.080638 | vel_loss=0.022804 | weighted_ade=1.433920 | LR=7.22e-04
+2026-03-05 18:49:35,438 - INFO - [Epoch 183/300] ade=1.409563 | ade_loss=1.409563 | fde=1.471277 | fde_loss=1.471277 | kl_loss=0.000011 | l2_loss=0.863687 | smooth_loss=0.051856 | total_loss=5.039112 | vel_loss=0.022608 | weighted_ade=1.418990 | LR=7.12e-04
+2026-03-05 18:50:15,857 - INFO - [Epoch 184/300] ade=1.412524 | ade_loss=1.412524 | fde=1.474877 | fde_loss=1.474877 | kl_loss=0.000003 | l2_loss=0.871238 | smooth_loss=0.051393 | total_loss=5.071043 | vel_loss=0.022503 | weighted_ade=1.422073 | LR=7.01e-04
+2026-03-05 18:50:56,274 - INFO - [Epoch 185/300] ade=1.404037 | ade_loss=1.404037 | fde=1.466027 | fde_loss=1.466027 | kl_loss=0.000026 | l2_loss=0.855230 | smooth_loss=0.051621 | total_loss=5.052273 | vel_loss=0.022522 | weighted_ade=1.413510 | LR=6.91e-04
+2026-03-05 18:50:56,363 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.404037m
+2026-03-05 18:51:36,786 - INFO - [Epoch 186/300] ade=1.399066 | ade_loss=1.399066 | fde=1.460866 | fde_loss=1.460866 | kl_loss=0.000021 | l2_loss=0.847814 | smooth_loss=0.051359 | total_loss=5.049519 | vel_loss=0.022399 | weighted_ade=1.408566 | LR=6.81e-04
+2026-03-05 18:51:36,869 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.399066m
+2026-03-05 18:52:17,287 - INFO - [Epoch 187/300] ade=1.389392 | ade_loss=1.389392 | fde=1.451729 | fde_loss=1.451729 | kl_loss=0.000017 | l2_loss=0.833751 | smooth_loss=0.051530 | total_loss=5.028937 | vel_loss=0.022415 | weighted_ade=1.398945 | LR=6.70e-04
+2026-03-05 18:52:17,371 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.389392m
+2026-03-05 18:52:57,792 - INFO - [Epoch 188/300] ade=1.399732 | ade_loss=1.399732 | fde=1.461538 | fde_loss=1.461538 | kl_loss=0.000018 | l2_loss=0.848791 | smooth_loss=0.051557 | total_loss=5.087732 | vel_loss=0.022393 | weighted_ade=1.409176 | LR=6.60e-04
+2026-03-05 18:53:38,216 - INFO - [Epoch 189/300] ade=1.384521 | ade_loss=1.384521 | fde=1.446004 | fde_loss=1.446004 | kl_loss=0.000023 | l2_loss=0.827412 | smooth_loss=0.051253 | total_loss=5.043773 | vel_loss=0.022248 | weighted_ade=1.393914 | LR=6.50e-04
+2026-03-05 18:53:38,298 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.384521m
+2026-03-05 18:54:18,735 - INFO - [Epoch 190/300] ade=1.407266 | ade_loss=1.407266 | fde=1.467804 | fde_loss=1.467804 | kl_loss=0.000042 | l2_loss=0.857693 | smooth_loss=0.051506 | total_loss=5.151247 | vel_loss=0.022377 | weighted_ade=1.416582 | LR=6.40e-04
+2026-03-05 18:54:59,173 - INFO - [Epoch 191/300] ade=1.380192 | ade_loss=1.380192 | fde=1.441554 | fde_loss=1.441554 | kl_loss=0.000022 | l2_loss=0.821051 | smooth_loss=0.050888 | total_loss=5.061229 | vel_loss=0.022117 | weighted_ade=1.389591 | LR=6.30e-04
+2026-03-05 18:54:59,257 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.380192m
+2026-03-05 18:55:39,735 - INFO - [Epoch 192/300] ade=1.389554 | ade_loss=1.389554 | fde=1.450494 | fde_loss=1.450494 | kl_loss=0.000012 | l2_loss=0.833356 | smooth_loss=0.050745 | total_loss=5.115887 | vel_loss=0.021977 | weighted_ade=1.398840 | LR=6.20e-04
+2026-03-05 18:56:20,137 - INFO - [Epoch 193/300] ade=1.386889 | ade_loss=1.386889 | fde=1.447003 | fde_loss=1.447003 | kl_loss=0.000013 | l2_loss=0.827712 | smooth_loss=0.050626 | total_loss=5.120804 | vel_loss=0.021991 | weighted_ade=1.396110 | LR=6.10e-04
+2026-03-05 18:57:00,573 - INFO - [Epoch 194/300] ade=1.380025 | ade_loss=1.380025 | fde=1.439973 | fde_loss=1.439973 | kl_loss=0.000008 | l2_loss=0.820453 | smooth_loss=0.050651 | total_loss=5.111838 | vel_loss=0.021944 | weighted_ade=1.389256 | LR=6.00e-04
+2026-03-05 18:57:00,660 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.380025m
+2026-03-05 18:57:41,082 - INFO - [Epoch 195/300] ade=1.370240 | ade_loss=1.370240 | fde=1.431345 | fde_loss=1.431345 | kl_loss=0.000024 | l2_loss=0.806814 | smooth_loss=0.051033 | total_loss=5.091419 | vel_loss=0.022014 | weighted_ade=1.379494 | LR=5.90e-04
+2026-03-05 18:57:41,169 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.370240m
+2026-03-05 18:58:21,628 - INFO - [Epoch 196/300] ade=1.382672 | ade_loss=1.382672 | fde=1.442175 | fde_loss=1.442175 | kl_loss=0.000018 | l2_loss=0.824920 | smooth_loss=0.051057 | total_loss=5.158524 | vel_loss=0.021945 | weighted_ade=1.391821 | LR=5.80e-04
+2026-03-05 18:59:02,079 - INFO - [Epoch 197/300] ade=1.374733 | ade_loss=1.374733 | fde=1.433929 | fde_loss=1.433929 | kl_loss=0.000014 | l2_loss=0.810651 | smooth_loss=0.050520 | total_loss=5.141597 | vel_loss=0.021839 | weighted_ade=1.383720 | LR=5.70e-04
+2026-03-05 18:59:42,518 - INFO - [Epoch 198/300] ade=1.362599 | ade_loss=1.362599 | fde=1.422386 | fde_loss=1.422386 | kl_loss=0.000015 | l2_loss=0.792828 | smooth_loss=0.050352 | total_loss=5.109844 | vel_loss=0.021718 | weighted_ade=1.371683 | LR=5.61e-04
+2026-03-05 18:59:42,602 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.362599m
+2026-03-05 19:00:23,006 - INFO - [Epoch 199/300] ade=1.366289 | ade_loss=1.366289 | fde=1.426391 | fde_loss=1.426391 | kl_loss=0.000019 | l2_loss=0.796934 | smooth_loss=0.050564 | total_loss=5.142914 | vel_loss=0.021655 | weighted_ade=1.375417 | LR=5.51e-04
+2026-03-05 19:01:03,432 - INFO - [Epoch 200/300] ade=1.370733 | ade_loss=1.370733 | fde=1.429481 | fde_loss=1.429481 | kl_loss=0.000008 | l2_loss=0.802349 | smooth_loss=0.050024 | total_loss=5.176887 | vel_loss=0.021502 | weighted_ade=1.379631 | LR=5.41e-04
+2026-03-05 19:01:03,515 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 200)
+2026-03-05 19:01:43,912 - INFO - [Epoch 201/300] ade=1.361722 | ade_loss=1.361722 | fde=1.420588 | fde_loss=1.420588 | kl_loss=0.000033 | l2_loss=0.790606 | smooth_loss=0.050710 | total_loss=5.158488 | vel_loss=0.021708 | weighted_ade=1.370708 | LR=5.32e-04
+2026-03-05 19:01:43,998 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.361722m
+2026-03-05 19:02:24,405 - INFO - [Epoch 202/300] ade=1.367177 | ade_loss=1.367177 | fde=1.425821 | fde_loss=1.425821 | kl_loss=0.000016 | l2_loss=0.795315 | smooth_loss=0.049434 | total_loss=5.196848 | vel_loss=0.021338 | weighted_ade=1.376026 | LR=5.22e-04
+2026-03-05 19:03:04,835 - INFO - [Epoch 203/300] ade=1.354302 | ade_loss=1.354302 | fde=1.412519 | fde_loss=1.412519 | kl_loss=0.000022 | l2_loss=0.781105 | smooth_loss=0.050043 | total_loss=5.162976 | vel_loss=0.021460 | weighted_ade=1.363176 | LR=5.13e-04
+2026-03-05 19:03:04,919 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.354302m
+2026-03-05 19:03:45,334 - INFO - [Epoch 204/300] ade=1.353057 | ade_loss=1.353057 | fde=1.411426 | fde_loss=1.411426 | kl_loss=0.000019 | l2_loss=0.778162 | smooth_loss=0.049573 | total_loss=5.175180 | vel_loss=0.021187 | weighted_ade=1.361900 | LR=5.03e-04
+2026-03-05 19:03:45,416 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.353057m
+2026-03-05 19:04:25,820 - INFO - [Epoch 205/300] ade=1.350323 | ade_loss=1.350323 | fde=1.409174 | fde_loss=1.409174 | kl_loss=0.000006 | l2_loss=0.774149 | smooth_loss=0.049848 | total_loss=5.182470 | vel_loss=0.021245 | weighted_ade=1.359258 | LR=4.94e-04
+2026-03-05 19:04:25,900 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.350323m
+2026-03-05 19:05:06,317 - INFO - [Epoch 206/300] ade=1.341802 | ade_loss=1.341802 | fde=1.399427 | fde_loss=1.399427 | kl_loss=0.000007 | l2_loss=0.759730 | smooth_loss=0.049044 | total_loss=5.161443 | vel_loss=0.021084 | weighted_ade=1.350525 | LR=4.84e-04
+2026-03-05 19:05:06,401 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.341802m
+2026-03-05 19:05:46,789 - INFO - [Epoch 207/300] ade=1.344387 | ade_loss=1.344387 | fde=1.401230 | fde_loss=1.401230 | kl_loss=0.000020 | l2_loss=0.764859 | smooth_loss=0.049445 | total_loss=5.190314 | vel_loss=0.021150 | weighted_ade=1.352939 | LR=4.75e-04
+2026-03-05 19:06:27,202 - INFO - [Epoch 208/300] ade=1.347259 | ade_loss=1.347259 | fde=1.404301 | fde_loss=1.404301 | kl_loss=0.000010 | l2_loss=0.768601 | smooth_loss=0.049512 | total_loss=5.220750 | vel_loss=0.021120 | weighted_ade=1.355924 | LR=4.66e-04
+2026-03-05 19:07:07,613 - INFO - [Epoch 209/300] ade=1.344556 | ade_loss=1.344556 | fde=1.401498 | fde_loss=1.401498 | kl_loss=0.000020 | l2_loss=0.764462 | smooth_loss=0.049386 | total_loss=5.227136 | vel_loss=0.021118 | weighted_ade=1.353121 | LR=4.57e-04
+2026-03-05 19:07:48,020 - INFO - [Epoch 210/300] ade=1.345807 | ade_loss=1.345807 | fde=1.402841 | fde_loss=1.402841 | kl_loss=0.000032 | l2_loss=0.767052 | smooth_loss=0.048866 | total_loss=5.251020 | vel_loss=0.020969 | weighted_ade=1.354422 | LR=4.48e-04
+2026-03-05 19:08:28,473 - INFO - [Epoch 211/300] ade=1.339090 | ade_loss=1.339090 | fde=1.396475 | fde_loss=1.396475 | kl_loss=0.000024 | l2_loss=0.756481 | smooth_loss=0.049290 | total_loss=5.240750 | vel_loss=0.021069 | weighted_ade=1.347795 | LR=4.39e-04
+2026-03-05 19:08:28,557 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.339090m
+2026-03-05 19:09:09,011 - INFO - [Epoch 212/300] ade=1.333438 | ade_loss=1.333438 | fde=1.389385 | fde_loss=1.389385 | kl_loss=0.000019 | l2_loss=0.746899 | smooth_loss=0.048882 | total_loss=5.231835 | vel_loss=0.020862 | weighted_ade=1.341888 | LR=4.30e-04
+2026-03-05 19:09:09,095 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.333438m
+2026-03-05 19:09:49,541 - INFO - [Epoch 213/300] ade=1.344605 | ade_loss=1.344605 | fde=1.400695 | fde_loss=1.400695 | kl_loss=0.000016 | l2_loss=0.763646 | smooth_loss=0.048947 | total_loss=5.298739 | vel_loss=0.020812 | weighted_ade=1.353110 | LR=4.21e-04
+2026-03-05 19:10:29,997 - INFO - [Epoch 214/300] ade=1.333831 | ade_loss=1.333831 | fde=1.389315 | fde_loss=1.389315 | kl_loss=0.000013 | l2_loss=0.749779 | smooth_loss=0.048494 | total_loss=5.270417 | vel_loss=0.020644 | weighted_ade=1.342154 | LR=4.12e-04
+2026-03-05 19:11:10,467 - INFO - [Epoch 215/300] ade=1.333534 | ade_loss=1.333534 | fde=1.389162 | fde_loss=1.389162 | kl_loss=0.000017 | l2_loss=0.747873 | smooth_loss=0.048698 | total_loss=5.287023 | vel_loss=0.020698 | weighted_ade=1.341996 | LR=4.03e-04
+2026-03-05 19:11:50,917 - INFO - [Epoch 216/300] ade=1.328339 | ade_loss=1.328339 | fde=1.384193 | fde_loss=1.384193 | kl_loss=0.000018 | l2_loss=0.739879 | smooth_loss=0.048259 | total_loss=5.282727 | vel_loss=0.020552 | weighted_ade=1.336768 | LR=3.95e-04
+2026-03-05 19:11:51,003 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.328339m
+2026-03-05 19:12:31,451 - INFO - [Epoch 217/300] ade=1.329439 | ade_loss=1.329439 | fde=1.385360 | fde_loss=1.385360 | kl_loss=0.000016 | l2_loss=0.741429 | smooth_loss=0.048074 | total_loss=5.305882 | vel_loss=0.020406 | weighted_ade=1.337857 | LR=3.86e-04
+2026-03-05 19:13:11,913 - INFO - [Epoch 218/300] ade=1.325108 | ade_loss=1.325108 | fde=1.380402 | fde_loss=1.380402 | kl_loss=0.000016 | l2_loss=0.736697 | smooth_loss=0.048593 | total_loss=5.305499 | vel_loss=0.020529 | weighted_ade=1.333434 | LR=3.78e-04
+2026-03-05 19:13:11,996 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.325108m
+2026-03-05 19:13:52,408 - INFO - [Epoch 219/300] ade=1.330999 | ade_loss=1.330999 | fde=1.385901 | fde_loss=1.385901 | kl_loss=0.000019 | l2_loss=0.742795 | smooth_loss=0.048925 | total_loss=5.348120 | vel_loss=0.020632 | weighted_ade=1.339217 | LR=3.69e-04
+2026-03-05 19:14:32,813 - INFO - [Epoch 220/300] ade=1.322935 | ade_loss=1.322935 | fde=1.377824 | fde_loss=1.377824 | kl_loss=0.000015 | l2_loss=0.730444 | smooth_loss=0.048251 | total_loss=5.330596 | vel_loss=0.020342 | weighted_ade=1.331166 | LR=3.61e-04
+2026-03-05 19:14:32,897 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.322935m
+2026-03-05 19:14:32,981 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 220)
+2026-03-05 19:15:13,418 - INFO - [Epoch 221/300] ade=1.320201 | ade_loss=1.320201 | fde=1.374503 | fde_loss=1.374503 | kl_loss=0.000016 | l2_loss=0.728118 | smooth_loss=0.048304 | total_loss=5.337032 | vel_loss=0.020394 | weighted_ade=1.328330 | LR=3.53e-04
+2026-03-05 19:15:13,499 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.320201m
+2026-03-05 19:15:53,912 - INFO - [Epoch 222/300] ade=1.315256 | ade_loss=1.315256 | fde=1.369168 | fde_loss=1.369168 | kl_loss=0.000012 | l2_loss=0.719929 | smooth_loss=0.047863 | total_loss=5.332455 | vel_loss=0.020334 | weighted_ade=1.323325 | LR=3.44e-04
+2026-03-05 19:15:53,995 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.315256m
+2026-03-05 19:16:34,388 - INFO - [Epoch 223/300] ade=1.318693 | ade_loss=1.318693 | fde=1.373146 | fde_loss=1.373146 | kl_loss=0.000016 | l2_loss=0.725250 | smooth_loss=0.048044 | total_loss=5.367193 | vel_loss=0.020360 | weighted_ade=1.326933 | LR=3.36e-04
+2026-03-05 19:17:14,789 - INFO - [Epoch 224/300] ade=1.313512 | ade_loss=1.313512 | fde=1.367300 | fde_loss=1.367300 | kl_loss=0.000012 | l2_loss=0.718225 | smooth_loss=0.047460 | total_loss=5.361768 | vel_loss=0.020111 | weighted_ade=1.321624 | LR=3.28e-04
+2026-03-05 19:17:14,874 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.313512m
+2026-03-05 19:17:55,277 - INFO - [Epoch 225/300] ade=1.312441 | ade_loss=1.312441 | fde=1.366110 | fde_loss=1.366110 | kl_loss=0.000011 | l2_loss=0.714160 | smooth_loss=0.048225 | total_loss=5.374529 | vel_loss=0.020294 | weighted_ade=1.320515 | LR=3.20e-04
+2026-03-05 19:17:55,361 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.312441m
+2026-03-05 19:18:35,769 - INFO - [Epoch 226/300] ade=1.314106 | ade_loss=1.314106 | fde=1.368624 | fde_loss=1.368624 | kl_loss=0.000014 | l2_loss=0.718433 | smooth_loss=0.047952 | total_loss=5.402568 | vel_loss=0.020207 | weighted_ade=1.322343 | LR=3.12e-04
+2026-03-05 19:19:16,187 - INFO - [Epoch 227/300] ade=1.305705 | ade_loss=1.305705 | fde=1.359391 | fde_loss=1.359391 | kl_loss=0.000037 | l2_loss=0.706589 | smooth_loss=0.047339 | total_loss=5.382289 | vel_loss=0.019940 | weighted_ade=1.313811 | LR=3.04e-04
+2026-03-05 19:19:16,269 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.305705m
+2026-03-05 19:19:56,682 - INFO - [Epoch 228/300] ade=1.311200 | ade_loss=1.311200 | fde=1.364774 | fde_loss=1.364774 | kl_loss=0.000022 | l2_loss=0.711972 | smooth_loss=0.047528 | total_loss=5.424248 | vel_loss=0.020037 | weighted_ade=1.319299 | LR=2.97e-04
+2026-03-05 19:20:37,062 - INFO - [Epoch 229/300] ade=1.303693 | ade_loss=1.303693 | fde=1.357537 | fde_loss=1.357537 | kl_loss=0.000023 | l2_loss=0.703504 | smooth_loss=0.047684 | total_loss=5.410797 | vel_loss=0.019956 | weighted_ade=1.311811 | LR=2.89e-04
+2026-03-05 19:20:37,150 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.303693m
+2026-03-05 19:21:17,563 - INFO - [Epoch 230/300] ade=1.302686 | ade_loss=1.302686 | fde=1.356252 | fde_loss=1.356252 | kl_loss=0.000030 | l2_loss=0.702507 | smooth_loss=0.047090 | total_loss=5.424457 | vel_loss=0.019830 | weighted_ade=1.310716 | LR=2.81e-04
+2026-03-05 19:21:17,646 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.302686m
+2026-03-05 19:21:58,048 - INFO - [Epoch 231/300] ade=1.305012 | ade_loss=1.305012 | fde=1.359151 | fde_loss=1.359151 | kl_loss=0.000031 | l2_loss=0.702726 | smooth_loss=0.046982 | total_loss=5.453028 | vel_loss=0.019835 | weighted_ade=1.313172 | LR=2.74e-04
+2026-03-05 19:22:38,465 - INFO - [Epoch 232/300] ade=1.304479 | ade_loss=1.304479 | fde=1.357610 | fde_loss=1.357610 | kl_loss=0.000031 | l2_loss=0.703833 | smooth_loss=0.047293 | total_loss=5.468875 | vel_loss=0.019895 | weighted_ade=1.312462 | LR=2.67e-04
+2026-03-05 19:23:18,894 - INFO - [Epoch 233/300] ade=1.299016 | ade_loss=1.299016 | fde=1.351842 | fde_loss=1.351842 | kl_loss=0.000037 | l2_loss=0.698011 | smooth_loss=0.046869 | total_loss=5.463146 | vel_loss=0.019687 | weighted_ade=1.306992 | LR=2.59e-04
+2026-03-05 19:23:18,977 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.299016m
+2026-03-05 19:23:59,408 - INFO - [Epoch 234/300] ade=1.300419 | ade_loss=1.300419 | fde=1.353267 | fde_loss=1.353267 | kl_loss=0.000031 | l2_loss=0.697711 | smooth_loss=0.047356 | total_loss=5.487529 | vel_loss=0.019975 | weighted_ade=1.308390 | LR=2.52e-04
+2026-03-05 19:24:39,808 - INFO - [Epoch 235/300] ade=1.298290 | ade_loss=1.298290 | fde=1.351624 | fde_loss=1.351624 | kl_loss=0.000030 | l2_loss=0.695469 | smooth_loss=0.046756 | total_loss=5.497474 | vel_loss=0.019573 | weighted_ade=1.306253 | LR=2.45e-04
+2026-03-05 19:24:39,891 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.298290m
+2026-03-05 19:25:20,312 - INFO - [Epoch 236/300] ade=1.295638 | ade_loss=1.295638 | fde=1.348380 | fde_loss=1.348380 | kl_loss=0.000026 | l2_loss=0.692036 | smooth_loss=0.046810 | total_loss=5.503494 | vel_loss=0.019629 | weighted_ade=1.303508 | LR=2.38e-04
+2026-03-05 19:25:20,396 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.295638m
+2026-03-05 19:26:00,873 - INFO - [Epoch 237/300] ade=1.291182 | ade_loss=1.291182 | fde=1.344038 | fde_loss=1.344038 | kl_loss=0.000029 | l2_loss=0.684047 | smooth_loss=0.046085 | total_loss=5.501056 | vel_loss=0.019480 | weighted_ade=1.299063 | LR=2.31e-04
+2026-03-05 19:26:00,958 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.291182m
+2026-03-05 19:26:41,390 - INFO - [Epoch 238/300] ade=1.289129 | ade_loss=1.289129 | fde=1.342263 | fde_loss=1.342263 | kl_loss=0.000029 | l2_loss=0.682015 | smooth_loss=0.046506 | total_loss=5.511498 | vel_loss=0.019455 | weighted_ade=1.297141 | LR=2.24e-04
+2026-03-05 19:26:41,475 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.289129m
+2026-03-05 19:27:21,878 - INFO - [Epoch 239/300] ade=1.289047 | ade_loss=1.289047 | fde=1.341000 | fde_loss=1.341000 | kl_loss=0.000024 | l2_loss=0.680929 | smooth_loss=0.046979 | total_loss=5.527951 | vel_loss=0.019601 | weighted_ade=1.296865 | LR=2.17e-04
+2026-03-05 19:27:21,964 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.289047m
+2026-03-05 19:28:02,336 - INFO - [Epoch 240/300] ade=1.287467 | ade_loss=1.287467 | fde=1.340387 | fde_loss=1.340387 | kl_loss=0.000029 | l2_loss=0.679443 | smooth_loss=0.046469 | total_loss=5.541191 | vel_loss=0.019479 | weighted_ade=1.295392 | LR=2.11e-04
+2026-03-05 19:28:02,420 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.287467m
+2026-03-05 19:28:02,501 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 240)
+2026-03-05 19:28:42,879 - INFO - [Epoch 241/300] ade=1.289716 | ade_loss=1.289716 | fde=1.341734 | fde_loss=1.341734 | kl_loss=0.000033 | l2_loss=0.682954 | smooth_loss=0.046656 | total_loss=5.569358 | vel_loss=0.019549 | weighted_ade=1.297526 | LR=2.04e-04
+2026-03-05 19:29:23,267 - INFO - [Epoch 242/300] ade=1.290518 | ade_loss=1.290518 | fde=1.342493 | fde_loss=1.342493 | kl_loss=0.000019 | l2_loss=0.682244 | smooth_loss=0.046408 | total_loss=5.591088 | vel_loss=0.019389 | weighted_ade=1.298309 | LR=1.97e-04
+2026-03-05 19:30:03,622 - INFO - [Epoch 243/300] ade=1.282587 | ade_loss=1.282587 | fde=1.334908 | fde_loss=1.334908 | kl_loss=0.000018 | l2_loss=0.672682 | smooth_loss=0.046132 | total_loss=5.574396 | vel_loss=0.019240 | weighted_ade=1.290414 | LR=1.91e-04
+2026-03-05 19:30:03,708 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.282587m
+2026-03-05 19:30:44,105 - INFO - [Epoch 244/300] ade=1.284062 | ade_loss=1.284062 | fde=1.335446 | fde_loss=1.335446 | kl_loss=0.000027 | l2_loss=0.673078 | smooth_loss=0.046138 | total_loss=5.598065 | vel_loss=0.019261 | weighted_ade=1.291787 | LR=1.85e-04
+2026-03-05 19:31:24,492 - INFO - [Epoch 245/300] ade=1.283120 | ade_loss=1.283120 | fde=1.334954 | fde_loss=1.334954 | kl_loss=0.000026 | l2_loss=0.672952 | smooth_loss=0.046440 | total_loss=5.614112 | vel_loss=0.019362 | weighted_ade=1.290876 | LR=1.78e-04
+2026-03-05 19:32:04,856 - INFO - [Epoch 246/300] ade=1.279987 | ade_loss=1.279987 | fde=1.331461 | fde_loss=1.331461 | kl_loss=0.000022 | l2_loss=0.666959 | smooth_loss=0.046283 | total_loss=5.617192 | vel_loss=0.019262 | weighted_ade=1.287706 | LR=1.72e-04
+2026-03-05 19:32:04,943 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.279987m
+2026-03-05 19:32:45,313 - INFO - [Epoch 247/300] ade=1.279676 | ade_loss=1.279676 | fde=1.331157 | fde_loss=1.331157 | kl_loss=0.000021 | l2_loss=0.668024 | smooth_loss=0.046718 | total_loss=5.635696 | vel_loss=0.019426 | weighted_ade=1.287358 | LR=1.66e-04
+2026-03-05 19:32:45,395 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.279676m
+2026-03-05 19:33:25,825 - INFO - [Epoch 248/300] ade=1.277750 | ade_loss=1.277750 | fde=1.329170 | fde_loss=1.329170 | kl_loss=0.000021 | l2_loss=0.665618 | smooth_loss=0.046137 | total_loss=5.645513 | vel_loss=0.019253 | weighted_ade=1.285444 | LR=1.60e-04
+2026-03-05 19:33:25,911 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.277750m
+2026-03-05 19:34:06,342 - INFO - [Epoch 249/300] ade=1.277030 | ade_loss=1.277030 | fde=1.328725 | fde_loss=1.328725 | kl_loss=0.000022 | l2_loss=0.664230 | smooth_loss=0.046067 | total_loss=5.661516 | vel_loss=0.019165 | weighted_ade=1.284779 | LR=1.55e-04
+2026-03-05 19:34:06,427 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.277030m
+2026-03-05 19:34:46,813 - INFO - [Epoch 250/300] ade=1.276129 | ade_loss=1.276129 | fde=1.327036 | fde_loss=1.327036 | kl_loss=0.000028 | l2_loss=0.661462 | smooth_loss=0.046297 | total_loss=5.674628 | vel_loss=0.019220 | weighted_ade=1.283755 | LR=1.49e-04
+2026-03-05 19:34:46,896 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.276129m
+2026-03-05 19:35:27,262 - INFO - [Epoch 251/300] ade=1.274756 | ade_loss=1.274756 | fde=1.325952 | fde_loss=1.325952 | kl_loss=0.000020 | l2_loss=0.660319 | smooth_loss=0.045522 | total_loss=5.687760 | vel_loss=0.019016 | weighted_ade=1.282434 | LR=1.43e-04
+2026-03-05 19:35:27,346 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.274756m
+2026-03-05 19:36:07,730 - INFO - [Epoch 252/300] ade=1.274771 | ade_loss=1.274771 | fde=1.325909 | fde_loss=1.325909 | kl_loss=0.000025 | l2_loss=0.660447 | smooth_loss=0.046121 | total_loss=5.707302 | vel_loss=0.019132 | weighted_ade=1.282459 | LR=1.38e-04
+2026-03-05 19:36:48,093 - INFO - [Epoch 253/300] ade=1.274871 | ade_loss=1.274871 | fde=1.325711 | fde_loss=1.325711 | kl_loss=0.000036 | l2_loss=0.660398 | smooth_loss=0.045856 | total_loss=5.726359 | vel_loss=0.019017 | weighted_ade=1.282538 | LR=1.32e-04
+2026-03-05 19:37:28,492 - INFO - [Epoch 254/300] ade=1.272261 | ade_loss=1.272261 | fde=1.322830 | fde_loss=1.322830 | kl_loss=0.000021 | l2_loss=0.655947 | smooth_loss=0.044968 | total_loss=5.731992 | vel_loss=0.018800 | weighted_ade=1.279849 | LR=1.27e-04
+2026-03-05 19:37:28,574 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.272261m
+2026-03-05 19:38:08,997 - INFO - [Epoch 255/300] ade=1.270930 | ade_loss=1.270930 | fde=1.321696 | fde_loss=1.321696 | kl_loss=0.000021 | l2_loss=0.654525 | smooth_loss=0.045308 | total_loss=5.745615 | vel_loss=0.018935 | weighted_ade=1.278550 | LR=1.22e-04
+2026-03-05 19:38:09,082 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.270930m
+2026-03-05 19:38:49,493 - INFO - [Epoch 256/300] ade=1.269908 | ade_loss=1.269908 | fde=1.320814 | fde_loss=1.320814 | kl_loss=0.000023 | l2_loss=0.653967 | smooth_loss=0.045640 | total_loss=5.760797 | vel_loss=0.018970 | weighted_ade=1.277519 | LR=1.16e-04
+2026-03-05 19:38:49,577 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.269908m
+2026-03-05 19:39:30,001 - INFO - [Epoch 257/300] ade=1.269815 | ade_loss=1.269815 | fde=1.320281 | fde_loss=1.320281 | kl_loss=0.000032 | l2_loss=0.652966 | smooth_loss=0.045452 | total_loss=5.778544 | vel_loss=0.018868 | weighted_ade=1.277410 | LR=1.11e-04
+2026-03-05 19:39:30,084 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.269815m
+2026-03-05 19:40:10,505 - INFO - [Epoch 258/300] ade=1.266738 | ade_loss=1.266738 | fde=1.316774 | fde_loss=1.316774 | kl_loss=0.000029 | l2_loss=0.648803 | smooth_loss=0.045864 | total_loss=5.782615 | vel_loss=0.018976 | weighted_ade=1.274215 | LR=1.07e-04
+2026-03-05 19:40:10,587 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.266738m
+2026-03-05 19:40:51,063 - INFO - [Epoch 259/300] ade=1.266755 | ade_loss=1.266755 | fde=1.317203 | fde_loss=1.317203 | kl_loss=0.000029 | l2_loss=0.648458 | smooth_loss=0.045536 | total_loss=5.802510 | vel_loss=0.018936 | weighted_ade=1.274310 | LR=1.02e-04
+2026-03-05 19:41:31,457 - INFO - [Epoch 260/300] ade=1.263466 | ade_loss=1.263466 | fde=1.313187 | fde_loss=1.313187 | kl_loss=0.000021 | l2_loss=0.644208 | smooth_loss=0.045359 | total_loss=5.804785 | vel_loss=0.018755 | weighted_ade=1.270900 | LR=9.70e-05
+2026-03-05 19:41:31,542 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.263466m
+2026-03-05 19:41:31,622 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 260)
+2026-03-05 19:42:12,018 - INFO - [Epoch 261/300] ade=1.263721 | ade_loss=1.263721 | fde=1.314304 | fde_loss=1.314304 | kl_loss=0.000021 | l2_loss=0.644462 | smooth_loss=0.045435 | total_loss=5.826959 | vel_loss=0.018837 | weighted_ade=1.271267 | LR=9.24e-05
+2026-03-05 19:42:52,431 - INFO - [Epoch 262/300] ade=1.263084 | ade_loss=1.263084 | fde=1.313092 | fde_loss=1.313092 | kl_loss=0.000017 | l2_loss=0.643840 | smooth_loss=0.045745 | total_loss=5.842620 | vel_loss=0.018943 | weighted_ade=1.270545 | LR=8.79e-05
+2026-03-05 19:42:52,515 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.263084m
+2026-03-05 19:43:32,894 - INFO - [Epoch 263/300] ade=1.261475 | ade_loss=1.261475 | fde=1.311586 | fde_loss=1.311586 | kl_loss=0.000024 | l2_loss=0.640927 | smooth_loss=0.045124 | total_loss=5.853873 | vel_loss=0.018690 | weighted_ade=1.268950 | LR=8.35e-05
+2026-03-05 19:43:32,977 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.261475m
+2026-03-05 19:44:13,359 - INFO - [Epoch 264/300] ade=1.261736 | ade_loss=1.261736 | fde=1.312112 | fde_loss=1.312112 | kl_loss=0.000030 | l2_loss=0.641565 | smooth_loss=0.045010 | total_loss=5.875218 | vel_loss=0.018677 | weighted_ade=1.269230 | LR=7.93e-05
+2026-03-05 19:44:53,752 - INFO - [Epoch 265/300] ade=1.260564 | ade_loss=1.260564 | fde=1.310327 | fde_loss=1.310327 | kl_loss=0.000023 | l2_loss=0.640118 | smooth_loss=0.044941 | total_loss=5.888015 | vel_loss=0.018657 | weighted_ade=1.267996 | LR=7.51e-05
+2026-03-05 19:44:53,838 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.260564m
+2026-03-05 19:45:34,221 - INFO - [Epoch 266/300] ade=1.259513 | ade_loss=1.259513 | fde=1.308806 | fde_loss=1.308806 | kl_loss=0.000025 | l2_loss=0.638927 | smooth_loss=0.044566 | total_loss=5.901536 | vel_loss=0.018504 | weighted_ade=1.266894 | LR=7.10e-05
+2026-03-05 19:45:34,308 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.259513m
+2026-03-05 19:46:14,712 - INFO - [Epoch 267/300] ade=1.258756 | ade_loss=1.258756 | fde=1.308824 | fde_loss=1.308824 | kl_loss=0.000019 | l2_loss=0.637532 | smooth_loss=0.045447 | total_loss=5.919089 | vel_loss=0.018778 | weighted_ade=1.266228 | LR=6.71e-05
+2026-03-05 19:46:14,794 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.258756m
+2026-03-05 19:46:55,170 - INFO - [Epoch 268/300] ade=1.258314 | ade_loss=1.258314 | fde=1.307337 | fde_loss=1.307337 | kl_loss=0.000021 | l2_loss=0.636507 | smooth_loss=0.044839 | total_loss=5.934275 | vel_loss=0.018606 | weighted_ade=1.265643 | LR=6.32e-05
+2026-03-05 19:46:55,254 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.258314m
+2026-03-05 19:47:35,627 - INFO - [Epoch 269/300] ade=1.256549 | ade_loss=1.256549 | fde=1.305805 | fde_loss=1.305805 | kl_loss=0.000015 | l2_loss=0.633966 | smooth_loss=0.044503 | total_loss=5.945401 | vel_loss=0.018462 | weighted_ade=1.263882 | LR=5.95e-05
+2026-03-05 19:47:35,709 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.256549m
+2026-03-05 19:48:16,087 - INFO - [Epoch 270/300] ade=1.255642 | ade_loss=1.255642 | fde=1.305426 | fde_loss=1.305426 | kl_loss=0.000013 | l2_loss=0.633056 | smooth_loss=0.045105 | total_loss=5.961956 | vel_loss=0.018593 | weighted_ade=1.263071 | LR=5.59e-05
+2026-03-05 19:48:16,174 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.255642m
+2026-03-05 19:48:56,565 - INFO - [Epoch 271/300] ade=1.255847 | ade_loss=1.255847 | fde=1.305337 | fde_loss=1.305337 | kl_loss=0.000014 | l2_loss=0.632544 | smooth_loss=0.045105 | total_loss=5.981915 | vel_loss=0.018613 | weighted_ade=1.263209 | LR=5.23e-05
+2026-03-05 19:49:36,910 - INFO - [Epoch 272/300] ade=1.254665 | ade_loss=1.254665 | fde=1.303733 | fde_loss=1.303733 | kl_loss=0.000013 | l2_loss=0.632450 | smooth_loss=0.044753 | total_loss=5.995416 | vel_loss=0.018514 | weighted_ade=1.261960 | LR=4.89e-05
+2026-03-05 19:49:36,995 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.254665m
+2026-03-05 19:50:17,399 - INFO - [Epoch 273/300] ade=1.253505 | ade_loss=1.253505 | fde=1.303650 | fde_loss=1.303650 | kl_loss=0.000016 | l2_loss=0.630071 | smooth_loss=0.045151 | total_loss=6.011235 | vel_loss=0.018603 | weighted_ade=1.260975 | LR=4.57e-05
+2026-03-05 19:50:17,483 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.253505m
+2026-03-05 19:50:57,903 - INFO - [Epoch 274/300] ade=1.251509 | ade_loss=1.251509 | fde=1.300287 | fde_loss=1.300287 | kl_loss=0.000018 | l2_loss=0.627040 | smooth_loss=0.044908 | total_loss=6.018334 | vel_loss=0.018535 | weighted_ade=1.258809 | LR=4.25e-05
+2026-03-05 19:50:57,989 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.251509m
+2026-03-05 19:51:38,402 - INFO - [Epoch 275/300] ade=1.251405 | ade_loss=1.251405 | fde=1.300684 | fde_loss=1.300684 | kl_loss=0.000019 | l2_loss=0.626689 | smooth_loss=0.044501 | total_loss=6.038280 | vel_loss=0.018431 | weighted_ade=1.258749 | LR=3.94e-05
+2026-03-05 19:51:38,484 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.251405m
+2026-03-05 19:52:18,884 - INFO - [Epoch 276/300] ade=1.251171 | ade_loss=1.251171 | fde=1.300460 | fde_loss=1.300460 | kl_loss=0.000018 | l2_loss=0.626377 | smooth_loss=0.044372 | total_loss=6.056930 | vel_loss=0.018362 | weighted_ade=1.258509 | LR=3.65e-05
+2026-03-05 19:52:18,973 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.251171m
+2026-03-05 19:52:59,386 - INFO - [Epoch 277/300] ade=1.249083 | ade_loss=1.249083 | fde=1.298673 | fde_loss=1.298673 | kl_loss=0.000015 | l2_loss=0.623758 | smooth_loss=0.044489 | total_loss=6.066943 | vel_loss=0.018357 | weighted_ade=1.256426 | LR=3.36e-05
+2026-03-05 19:52:59,471 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.249083m
+2026-03-05 19:53:39,874 - INFO - [Epoch 278/300] ade=1.250037 | ade_loss=1.250037 | fde=1.298761 | fde_loss=1.298761 | kl_loss=0.000016 | l2_loss=0.625859 | smooth_loss=0.044476 | total_loss=6.090415 | vel_loss=0.018350 | weighted_ade=1.257303 | LR=3.09e-05
+2026-03-05 19:54:20,302 - INFO - [Epoch 279/300] ade=1.248594 | ade_loss=1.248594 | fde=1.297663 | fde_loss=1.297663 | kl_loss=0.000016 | l2_loss=0.623154 | smooth_loss=0.044742 | total_loss=6.103543 | vel_loss=0.018448 | weighted_ade=1.255926 | LR=2.83e-05
+2026-03-05 19:54:20,388 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.248594m
+2026-03-05 19:55:00,783 - INFO - [Epoch 280/300] ade=1.247694 | ade_loss=1.247694 | fde=1.296754 | fde_loss=1.296754 | kl_loss=0.000017 | l2_loss=0.622501 | smooth_loss=0.044265 | total_loss=6.118877 | vel_loss=0.018284 | weighted_ade=1.254988 | LR=2.58e-05
+2026-03-05 19:55:00,869 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.247694m
+2026-03-05 19:55:00,951 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 280)
+2026-03-05 19:55:41,338 - INFO - [Epoch 281/300] ade=1.247335 | ade_loss=1.247335 | fde=1.295790 | fde_loss=1.295790 | kl_loss=0.000014 | l2_loss=0.621972 | smooth_loss=0.044177 | total_loss=6.135879 | vel_loss=0.018256 | weighted_ade=1.254582 | LR=2.34e-05
+2026-03-05 19:55:41,419 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.247335m
+2026-03-05 19:56:21,827 - INFO - [Epoch 282/300] ade=1.246456 | ade_loss=1.246456 | fde=1.295520 | fde_loss=1.295520 | kl_loss=0.000013 | l2_loss=0.620760 | smooth_loss=0.044672 | total_loss=6.152790 | vel_loss=0.018405 | weighted_ade=1.253714 | LR=2.11e-05
+2026-03-05 19:56:21,910 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.246456m
+2026-03-05 19:57:02,319 - INFO - [Epoch 283/300] ade=1.246059 | ade_loss=1.246059 | fde=1.295062 | fde_loss=1.295062 | kl_loss=0.000014 | l2_loss=0.619526 | smooth_loss=0.044259 | total_loss=6.170264 | vel_loss=0.018266 | weighted_ade=1.253365 | LR=1.90e-05
+2026-03-05 19:57:02,400 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.246059m
+2026-03-05 19:57:42,755 - INFO - [Epoch 284/300] ade=1.246004 | ade_loss=1.246004 | fde=1.294775 | fde_loss=1.294775 | kl_loss=0.000016 | l2_loss=0.619422 | smooth_loss=0.044294 | total_loss=6.189672 | vel_loss=0.018328 | weighted_ade=1.253316 | LR=1.69e-05
+2026-03-05 19:57:42,840 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.246004m
+2026-03-05 19:58:23,223 - INFO - [Epoch 285/300] ade=1.244918 | ade_loss=1.244918 | fde=1.293937 | fde_loss=1.293937 | kl_loss=0.000015 | l2_loss=0.618806 | smooth_loss=0.044056 | total_loss=6.204828 | vel_loss=0.018227 | weighted_ade=1.252225 | LR=1.50e-05
+2026-03-05 19:58:23,308 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.244918m
+2026-03-05 19:59:03,685 - INFO - [Epoch 286/300] ade=1.244788 | ade_loss=1.244788 | fde=1.293929 | fde_loss=1.293929 | kl_loss=0.000014 | l2_loss=0.618507 | smooth_loss=0.043783 | total_loss=6.224373 | vel_loss=0.018109 | weighted_ade=1.252072 | LR=1.32e-05
+2026-03-05 19:59:03,768 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.244788m
+2026-03-05 19:59:44,164 - INFO - [Epoch 287/300] ade=1.244126 | ade_loss=1.244126 | fde=1.292822 | fde_loss=1.292822 | kl_loss=0.000013 | l2_loss=0.617453 | smooth_loss=0.044328 | total_loss=6.240527 | vel_loss=0.018336 | weighted_ade=1.251337 | LR=1.15e-05
+2026-03-05 19:59:44,247 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.244126m
+2026-03-05 20:00:24,594 - INFO - [Epoch 288/300] ade=1.242915 | ade_loss=1.242915 | fde=1.291074 | fde_loss=1.291074 | kl_loss=0.000014 | l2_loss=0.615338 | smooth_loss=0.044019 | total_loss=6.253100 | vel_loss=0.018250 | weighted_ade=1.250089 | LR=9.90e-06
+2026-03-05 20:00:24,677 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.242915m
+2026-03-05 20:01:05,094 - INFO - [Epoch 289/300] ade=1.243263 | ade_loss=1.243263 | fde=1.291620 | fde_loss=1.291620 | kl_loss=0.000013 | l2_loss=0.616142 | smooth_loss=0.043808 | total_loss=6.275550 | vel_loss=0.018111 | weighted_ade=1.250429 | LR=8.44e-06
+2026-03-05 20:01:45,463 - INFO - [Epoch 290/300] ade=1.242279 | ade_loss=1.242279 | fde=1.290911 | fde_loss=1.290911 | kl_loss=0.000014 | l2_loss=0.614350 | smooth_loss=0.044031 | total_loss=6.291174 | vel_loss=0.018161 | weighted_ade=1.249534 | LR=7.09e-06
+2026-03-05 20:01:45,546 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.242279m
+2026-03-05 20:02:25,941 - INFO - [Epoch 291/300] ade=1.241718 | ade_loss=1.241718 | fde=1.290328 | fde_loss=1.290328 | kl_loss=0.000016 | l2_loss=0.614086 | smooth_loss=0.044247 | total_loss=6.308773 | vel_loss=0.018201 | weighted_ade=1.248949 | LR=5.86e-06
+2026-03-05 20:02:26,025 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.241718m
+2026-03-05 20:03:06,426 - INFO - [Epoch 292/300] ade=1.242023 | ade_loss=1.242023 | fde=1.290763 | fde_loss=1.290763 | kl_loss=0.000017 | l2_loss=0.614277 | smooth_loss=0.043879 | total_loss=6.330725 | vel_loss=0.018125 | weighted_ade=1.249279 | LR=4.75e-06
+2026-03-05 20:03:46,830 - INFO - [Epoch 293/300] ade=1.241929 | ade_loss=1.241929 | fde=1.289983 | fde_loss=1.289983 | kl_loss=0.000018 | l2_loss=0.614286 | smooth_loss=0.043905 | total_loss=6.349346 | vel_loss=0.018083 | weighted_ade=1.249094 | LR=3.75e-06
+2026-03-05 20:04:27,215 - INFO - [Epoch 294/300] ade=1.241082 | ade_loss=1.241082 | fde=1.289721 | fde_loss=1.289721 | kl_loss=0.000019 | l2_loss=0.612473 | smooth_loss=0.044178 | total_loss=6.366349 | vel_loss=0.018178 | weighted_ade=1.248298 | LR=2.87e-06
+2026-03-05 20:04:27,294 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.241082m
+2026-03-05 20:05:07,727 - INFO - [Epoch 295/300] ade=1.241296 | ade_loss=1.241296 | fde=1.290089 | fde_loss=1.290089 | kl_loss=0.000018 | l2_loss=0.612614 | smooth_loss=0.043865 | total_loss=6.388038 | vel_loss=0.018102 | weighted_ade=1.248547 | LR=2.11e-06
+2026-03-05 20:05:48,154 - INFO - [Epoch 296/300] ade=1.240624 | ade_loss=1.240624 | fde=1.289245 | fde_loss=1.289245 | kl_loss=0.000017 | l2_loss=0.611584 | smooth_loss=0.044036 | total_loss=6.404669 | vel_loss=0.018157 | weighted_ade=1.247888 | LR=1.47e-06
+2026-03-05 20:05:48,237 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.240624m
+2026-03-05 20:06:28,677 - INFO - [Epoch 297/300] ade=1.240721 | ade_loss=1.240721 | fde=1.290028 | fde_loss=1.290028 | kl_loss=0.000017 | l2_loss=0.612938 | smooth_loss=0.044147 | total_loss=6.427509 | vel_loss=0.018256 | weighted_ade=1.248026 | LR=9.39e-07
+2026-03-05 20:07:09,125 - INFO - [Epoch 298/300] ade=1.240755 | ade_loss=1.240755 | fde=1.289351 | fde_loss=1.289351 | kl_loss=0.000017 | l2_loss=0.612742 | smooth_loss=0.044321 | total_loss=6.446864 | vel_loss=0.018259 | weighted_ade=1.248004 | LR=5.28e-07
+2026-03-05 20:07:49,581 - INFO - [Epoch 299/300] ade=1.239909 | ade_loss=1.239909 | fde=1.288632 | fde_loss=1.288632 | kl_loss=0.000017 | l2_loss=0.610446 | smooth_loss=0.043971 | total_loss=6.462635 | vel_loss=0.018184 | weighted_ade=1.247150 | LR=2.35e-07
+2026-03-05 20:07:49,665 - INFO -   ✓ [BEST] 保存最佳模型 - ADE=1.239909m
+2026-03-05 20:08:30,097 - INFO - [Epoch 300/300] ade=1.240977 | ade_loss=1.240977 | fde=1.289193 | fde_loss=1.289193 | kl_loss=0.000017 | l2_loss=0.613032 | smooth_loss=0.044220 | total_loss=6.488485 | vel_loss=0.018232 | weighted_ade=1.248136 | LR=5.87e-08
+2026-03-05 20:08:30,186 - INFO -   ✓ [CHECKPOINT] 保存检查点 (epoch 300)
+2026-03-05 20:08:30,186 - INFO - 
+====================================================================================================
+2026-03-05 20:08:30,186 - INFO - [完成] 训练结束!
+2026-03-05 20:08:30,186 - INFO -   最佳 ADE: 1.239909m
+2026-03-05 20:08:30,186 - INFO -   最佳 epoch: 299
+2026-03-05 20:08:30,187 - INFO -   检查点目录: checkpoints_optimized\agents_3_optimized
+2026-03-05 20:08:30,187 - INFO - ====================================================================================================
