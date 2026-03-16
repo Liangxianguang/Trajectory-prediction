@@ -1,93 +1,93 @@
 @echo off
 REM ====================================================
-REM 三模型对比脚本
+REM Three-model comparison script
 REM 3DMoTraj (LBEBM3D) vs DG32-BCAT (Exp5) vs MRGTraj-LBEBM3D
 REM ====================================================
 
 setlocal enabledelayedexpansion
 
-REM === 数据路径 ===
+REM === Data paths ===
 set DATA_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\swarm_segments
 set FEATURES_32D_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\features_32d
 set OUTPUT_DIR=D:\Trajectory prediction\drone_trajectories\MRGTraj-main\three_models_vs\2knewimage_comparison_results_three_models
 
-REM === 模型路径 ===
+REM === Model paths ===
 set LBEBM_MODEL=D:\Trajectory prediction\drone_trajectories\3DMoTraj\saved_models\checkpoints_accfix\epoch_020.pt
 set EXP5_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\ablation study\ablation_results_agents_3_exp5_full
 set MRGRAJ_MODEL=D:\Trajectory prediction\drone_trajectories\MRGTraj-main\checkpoints_lbebm3d\agents_3_lbebm3d_inspired\best_model.pth
 
-REM === LBEBM3D 参数 ===
+REM === LBEBM3D parameters ===
 set DATA_SCALE=1.0
 set E_INIT_SIG=2.0
 set E_PRIOR_SIG=2.0
 set E_L_STEPS=20
 set E_L_STEP_SIZE=0.4
 
-REM === 样本选择 ===
-REM 选项1: 指定索引
+REM === Sampling options ===
+REM Option 1: specify sample indices
 REM set SAMPLE_INDICES=100,500,1000,2000,5000
 
-REM 选项2: 随机采样
+REM Option 2: random samples
 set NUM_SAMPLES=2000
 set SEED=42
 
-REM === 物理约束参数 ===
-REM Exp5 物理约束
+REM === Physical constraints ===
+REM Exp5 constraints
 set ENABLE_EXP5_PHYSICS=1
 set PC_DT=0.1
 set PC_SMOOTHING_WEIGHT=0.3
 set PC_CONSTRAINT_RELAXATION=1.0
 
-REM MRGTraj 物理约束
+REM MRGTraj constraints
 set ENABLE_MRGRAJ_PHYSICS=1
 set MRGRAJ_PC_DT=0.1
 set MRGRAJ_PC_SMOOTHING_WEIGHT=0.1
 set MRGRAJ_PC_CONSTRAINT_RELAXATION=0.6
 
-REM === 验证集划分 ===
+REM === Validation split ===
 set USE_VAL_SPLIT=1
 set VAL_SPLIT=0.2
 
-REM === 可视化 ===
-REM 1 = 生成每个样本的图表，0 = 跳过以加快速度
+REM === Visualization ===
+REM 1 = enable per-sample plots, 0 = disable for speed
 set ENABLE_VISUALIZE=1
 
 REM ====================================================
 
 echo ============================================
-echo 三模型对比: LBEBM3D vs Exp5 vs MRGTraj
+echo Three-model comparison: LBEBM3D vs Exp5 vs MRGTraj
 echo ============================================
 echo.
-echo 数据目录: %DATA_DIR%
-echo LBEBM3D 模型: %LBEBM_MODEL%
-echo Exp5 目录: %EXP5_DIR%
-echo MRGTraj 模型: %MRGRAJ_MODEL%
-echo 输出目录: %OUTPUT_DIR%
+echo Data dir: %DATA_DIR%
+echo LBEBM3D model: %LBEBM_MODEL%
+echo Exp5 dir: %EXP5_DIR%
+echo MRGTraj model: %MRGRAJ_MODEL%
+echo Output dir: %OUTPUT_DIR%
 echo.
 
-REM 检查模型文件
+REM Validate model files
 if not exist "%LBEBM_MODEL%" (
-    echo [ERROR] LBEBM3D 模型未找到: %LBEBM_MODEL%
+    echo [ERROR] LBEBM3D model not found: %LBEBM_MODEL%
     pause
     exit /b 1
 )
 
 if not exist "%EXP5_DIR%\best_model_agents_3_exp5_full.pt" (
-    echo [ERROR] Exp5 模型未找到: %EXP5_DIR%
+    echo [ERROR] Exp5 model not found: %EXP5_DIR%
     pause
     exit /b 1
 )
 
 if not exist "%MRGRAJ_MODEL%" (
-    echo [ERROR] MRGTraj 模型未找到: %MRGRAJ_MODEL%
+    echo [ERROR] MRGTraj model not found: %MRGRAJ_MODEL%
     pause
     exit /b 1
 )
 
-REM 创建输出目录
+REM Create output dir
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
-REM 构建命令
+REM Build command
 set CMD=python compare_three_models.py ^
     --data_dir "%DATA_DIR%" ^
     --agents 3 ^
@@ -104,19 +104,19 @@ set CMD=python compare_three_models.py ^
     --e_l_step_size %E_L_STEP_SIZE% ^
     --seed %SEED%
 
-REM 添加样本选择标志
+REM Sample selection flags
 if defined SAMPLE_INDICES (
     set CMD=!CMD! --sample_indices "%SAMPLE_INDICES%"
 ) else (
     set CMD=!CMD! --num_samples %NUM_SAMPLES%
 )
 
-REM 添加验证集划分标志
+REM Validation flags
 if "%USE_VAL_SPLIT%"=="1" (
     set CMD=!CMD! --use_val_split --val_split %VAL_SPLIT%
 )
 
-REM 添加物理约束标志
+REM Physical constraint flags
 if "%ENABLE_EXP5_PHYSICS%"=="0" (
     set CMD=!CMD! --no_physical_constraints
 )
@@ -127,16 +127,16 @@ if "%ENABLE_MRGRAJ_PHYSICS%"=="0" (
 )
 set CMD=!CMD! --mrgraj_pc_dt %MRGRAJ_PC_DT% --mrgraj_pc_smoothing_weight %MRGRAJ_PC_SMOOTHING_WEIGHT% --mrgraj_pc_constraint_relaxation %MRGRAJ_PC_CONSTRAINT_RELAXATION%
 
-REM 添加可视化标志
+REM Visualization flag
 if "%ENABLE_VISUALIZE%"=="0" (
     set CMD=!CMD! --no_visualize
 )
 
-echo 运行对比...
-echo 命令: !CMD!
+echo Running comparison...
+echo Command: !CMD!
 echo.
 
-REM 执行命令
+REM Execute
 !CMD!
 
 set EXIT_CODE=%ERRORLEVEL%
@@ -144,16 +144,16 @@ set EXIT_CODE=%ERRORLEVEL%
 echo.
 if !EXIT_CODE! equ 0 (
     echo ============================================
-    echo 对比完成！
-    echo 结果保存至: %OUTPUT_DIR%
+    echo Comparison completed.
+    echo Results saved to: %OUTPUT_DIR%
     echo ============================================
     echo.
-    echo 输出文件:
-    echo   - comparison_summary.json (汇总数据)
-    echo   - sample_*_comparison.png  (可视化图表)
+    echo Output files:
+    echo   - comparison_summary.json (summary metrics)
+    echo   - sample_*_comparison.png  (visualizations)
 ) else (
     echo ============================================
-    echo [ERROR] 对比失败，退出码: !EXIT_CODE!
+    echo [ERROR] Comparison failed. Exit code: !EXIT_CODE!
     echo ============================================
 )
 
