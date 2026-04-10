@@ -1,2 +1,2 @@
-git commit -m "four_models_image"
+git commit -m "generate_4x4_comparison"
 git push origin main
