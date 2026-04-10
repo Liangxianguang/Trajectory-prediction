@@ -1,0 +1,42 @@
+2026-03-09 14:02:36,032 [INFO] ================================================================================
+2026-03-09 14:02:36,032 [INFO] Swarm GRU Training (Enhanced v3)
+2026-03-09 14:02:36,032 [INFO] ================================================================================
+2026-03-09 14:02:36,032 [INFO] Arguments: {'num_agents': 3, 'use_subset': False, 'hidden_dim': 64, 'num_layers': 2, 'dropout': 0.3, 'num_epochs': 20, 'batch_size': 512, 'learning_rate': 0.001, 'lr_decay': 0.9, 'lr_decay_steps': 10, 'early_stopping_patience': 15, 'val_split': 0.1, 'device': 'cuda', 'seed': 42, 'save_every': 0}
+2026-03-09 14:02:36,053 [INFO] Device: cuda
+2026-03-09 14:02:36,060 [INFO] Loading data (3 agents)...
+2026-03-09 14:02:37,058 [INFO] Data shape: X=(230232, 20, 3, 3), Y=(230232, 10, 3, 3)
+2026-03-09 14:02:38,018 [INFO] Dataset: 230232 samples
+2026-03-09 14:02:38,018 [INFO]   Input:  mean=[ 0.6707142  0.4725033 11.878157 ], std=[25.494501 25.420677 12.767594]
+2026-03-09 14:02:38,019 [INFO]   Output: mean=[-0.01494008 -0.00840845 -0.01276703], std=[1.2501038 1.2376206 1.1986593]
+2026-03-09 14:02:38,034 [INFO] Train: 207209, Val: 23023
+2026-03-09 14:02:38,034 [INFO] Creating model...
+2026-03-09 14:02:38,164 [INFO] Parameters: 89,865
+2026-03-09 14:02:38,989 [INFO] Starting training...
+2026-03-09 14:02:45,888 [INFO] Epoch   1/20 | Train Loss: 1.752441 MAE: 0.325445 ADE: 0.650630 FDE: 1.148942 | Val Loss: 1.240035 MAE: 0.272328 ADE: 0.558890 FDE: 0.987415
+2026-03-09 14:02:52,628 [INFO] Epoch   2/20 | Train Loss: 0.768968 MAE: 0.259538 ADE: 0.529205 FDE: 0.908265 | Val Loss: 0.322122 MAE: 0.166772 ADE: 0.336532 FDE: 0.594893
+2026-03-09 14:02:59,278 [INFO] Epoch   3/20 | Train Loss: 0.272910 MAE: 0.179715 ADE: 0.364201 FDE: 0.587200 | Val Loss: 0.124977 MAE: 0.126411 ADE: 0.251052 FDE: 0.442048
+2026-03-09 14:03:06,937 [INFO] Epoch   4/20 | Train Loss: 0.125485 MAE: 0.129413 ADE: 0.259277 FDE: 0.430151 | Val Loss: 0.084919 MAE: 0.112959 ADE: 0.223724 FDE: 0.403767
+2026-03-09 14:03:14,276 [INFO] Epoch   5/20 | Train Loss: 0.092303 MAE: 0.114662 ADE: 0.229799 FDE: 0.390597 | Val Loss: 0.076243 MAE: 0.115163 ADE: 0.230693 FDE: 0.406492
+2026-03-09 14:03:21,651 [INFO] Epoch   6/20 | Train Loss: 0.079562 MAE: 0.109370 ADE: 0.218658 FDE: 0.376458 | Val Loss: 0.059725 MAE: 0.098461 ADE: 0.197524 FDE: 0.356566
+2026-03-09 14:03:29,253 [INFO] Epoch   7/20 | Train Loss: 0.071203 MAE: 0.104184 ADE: 0.208855 FDE: 0.362679 | Val Loss: 0.052601 MAE: 0.090721 ADE: 0.181982 FDE: 0.334680
+2026-03-09 14:03:36,289 [INFO] Epoch   8/20 | Train Loss: 0.065779 MAE: 0.100137 ADE: 0.200646 FDE: 0.351238 | Val Loss: 0.048673 MAE: 0.086516 ADE: 0.172091 FDE: 0.318969
+2026-03-09 14:03:43,795 [INFO] Epoch   9/20 | Train Loss: 0.062039 MAE: 0.098025 ADE: 0.196093 FDE: 0.344734 | Val Loss: 0.046963 MAE: 0.091421 ADE: 0.180287 FDE: 0.325623
+2026-03-09 14:03:50,958 [INFO] Epoch  10/20 | Train Loss: 0.058793 MAE: 0.095898 ADE: 0.191642 FDE: 0.337947 | Val Loss: 0.049744 MAE: 0.088150 ADE: 0.176644 FDE: 0.327648
+2026-03-09 14:03:57,800 [INFO] Epoch  11/20 | Train Loss: 0.054383 MAE: 0.091414 ADE: 0.183085 FDE: 0.324477 | Val Loss: 0.036002 MAE: 0.072606 ADE: 0.146137 FDE: 0.274588
+2026-03-09 14:04:04,585 [INFO] Epoch  12/20 | Train Loss: 0.052528 MAE: 0.089372 ADE: 0.179443 FDE: 0.318916 | Val Loss: 0.040445 MAE: 0.082514 ADE: 0.163542 FDE: 0.304454
+2026-03-09 14:04:11,450 [INFO] Epoch  13/20 | Train Loss: 0.050455 MAE: 0.088509 ADE: 0.177083 FDE: 0.315290 | Val Loss: 0.038056 MAE: 0.079486 ADE: 0.157954 FDE: 0.292692
+2026-03-09 14:04:17,974 [INFO] Epoch  14/20 | Train Loss: 0.048258 MAE: 0.085666 ADE: 0.171781 FDE: 0.306935 | Val Loss: 0.040988 MAE: 0.080013 ADE: 0.162180 FDE: 0.301611
+2026-03-09 14:04:24,525 [INFO] Epoch  15/20 | Train Loss: 0.046838 MAE: 0.084825 ADE: 0.169795 FDE: 0.303830 | Val Loss: 0.037901 MAE: 0.074921 ADE: 0.151203 FDE: 0.285044
+2026-03-09 14:04:30,934 [INFO] Epoch  16/20 | Train Loss: 0.045322 MAE: 0.083161 ADE: 0.166822 FDE: 0.299166 | Val Loss: 0.038547 MAE: 0.078211 ADE: 0.158656 FDE: 0.294945
+2026-03-09 14:04:37,251 [INFO] Epoch  17/20 | Train Loss: 0.044119 MAE: 0.082102 ADE: 0.164716 FDE: 0.295694 | Val Loss: 0.042768 MAE: 0.084013 ADE: 0.166667 FDE: 0.311583
+2026-03-09 14:04:43,587 [INFO] Epoch  18/20 | Train Loss: 0.041946 MAE: 0.079387 ADE: 0.159264 FDE: 0.287212 | Val Loss: 0.034070 MAE: 0.075490 ADE: 0.150834 FDE: 0.278848
+2026-03-09 14:04:50,235 [INFO] Epoch  19/20 | Train Loss: 0.040012 MAE: 0.077717 ADE: 0.155780 FDE: 0.281685 | Val Loss: 0.031023 MAE: 0.070941 ADE: 0.142154 FDE: 0.267840
+2026-03-09 14:04:56,869 [INFO] Epoch  20/20 | Train Loss: 0.039240 MAE: 0.076887 ADE: 0.154034 FDE: 0.278764 | Val Loss: 0.029667 MAE: 0.065958 ADE: 0.132508 FDE: 0.250023
+2026-03-09 14:04:56,876 [INFO] ================================================================================
+2026-03-09 14:04:56,877 [INFO] Training Summary
+2026-03-09 14:04:56,877 [INFO] ================================================================================
+2026-03-09 14:04:56,877 [INFO] Best validation loss: 0.02966725
+2026-03-09 14:04:56,877 [INFO] Best model saved: D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\Models\swarm_gru_agents_3_best.pth
+2026-03-09 14:04:56,877 [INFO] Metrics CSV: D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\Results\metrics_agents_3_20260309_140238.csv
+2026-03-09 14:04:56,877 [INFO] Checkpoints: D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\checkpoints\agents_3_20260309_140238
+2026-03-09 14:04:56,877 [INFO] ================================================================================
