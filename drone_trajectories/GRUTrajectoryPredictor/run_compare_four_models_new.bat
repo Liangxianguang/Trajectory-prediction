@@ -9,13 +9,14 @@ setlocal enabledelayedexpansion
 REM === Data paths ===
 set DATA_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\swarm_segments
 set FEATURES_32D_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\features_32d
-set OUTPUT_DIR=D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\new_1k_image_comparison_four_models_results
+set OUTPUT_DIR=D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\new2026522_2k_image_comparison_four_models_results
 
 REM === Model paths ===
-set LBEBM_MODEL=D:\Trajectory prediction\drone_trajectories\3DMoTraj\saved_models\checkpoints_accfix\epoch_030.pt
+set LBEBM_MODEL=D:\Trajectory prediction\drone_trajectories\3DMoTraj\saved_models\checkpoints_accfix\epoch_010.pt
+REM EXP5_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\ablation study\ablation_results_agents_3_exp5_full
 set EXP5_DIR=D:\Trajectory prediction\drone_trajectories\Cluster trajectory\ablation study\ablation_results_agents_3_exp5_full
 set MRGRAJ_MODEL=D:\Trajectory prediction\drone_trajectories\MRGTraj-main\checkpoints_lbebm3d\agents_3_lbebm3d_inspired\best_model.pth
-set GRU_MODEL=D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\checkpoints\agents_3_20260309_141203\epoch_190.pth
+set GRU_MODEL=D:\Trajectory prediction\drone_trajectories\GRUTrajectoryPredictor\checkpoints\agents_3_20260309_141203\epoch_030.pth
 REM === LBEBM3D parameters ===
 set DATA_SCALE=1.0
 set E_INIT_SIG=2.0
@@ -28,9 +29,9 @@ REM Option 1: specify sample indices
 REM set SAMPLE_INDICES=100,500,1000,2000,5000
 
 REM Option 2: random samples
-set NUM_SAMPLES=20
+set NUM_SAMPLES=2000
 
-set SEED=42
+set SEED=4
 
 REM === Physical constraints ===
 REM Exp5 constraints
@@ -43,7 +44,7 @@ REM MRGTraj constraints
 set ENABLE_MRGRAJ_PHYSICS=1
 set MRGRAJ_PC_DT=0.1
 set MRGRAJ_PC_SMOOTHING_WEIGHT=0.2
-set MRGRAJ_PC_CONSTRAINT_RELAXATION=0.6
+set MRGRAJ_PC_CONSTRAINT_RELAXATION=0.8
 
 REM === Validation split ===
 set USE_VAL_SPLIT=1
@@ -51,7 +52,7 @@ set VAL_SPLIT=0.2
 
 REM === Visualization ===
 REM 1 = enable per-sample plots, 0 = disable for speed
-set ENABLE_VISUALIZE=1
+set ENABLE_VISUALIZE=0
 
 REM ====================================================
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 四模型对比脚本: 3DMoTraj (LBEBM3D) vs DG32-BCAT (Exp5) vs MRGTraj vs SwarmGRU v3
 =================================================================================
@@ -31,7 +31,10 @@ cluster_traj_dir = workspace_root / "drone_trajectories" / "Cluster trajectory"
 tool_dir = workspace_root / "drone_trajectories" / "3DMoTraj" / "tool"
 mrgraj_dir = workspace_root / "drone_trajectories" / "MRGTraj-main"
 
+ablation_study_dir = cluster_traj_dir / "ablation study"
+
 sys.path.insert(0, str(cluster_traj_dir))
+sys.path.insert(0, str(ablation_study_dir))
 sys.path.insert(0, str(tool_dir))
 sys.path.insert(0, str(mrgraj_dir))
 
@@ -88,6 +91,16 @@ except (ImportError, ModuleNotFoundError) as e:
             logger.info("✓ Exp5 (DG32-BCAT) 导入成功 (动态加载)")
     except Exception as e2:
         logger.error(f"✗ Exp5 导入失败 (动态加载): {e2}")
+
+# Import AblationDataset — 与消融实验训练管道完全一致的特征归一化
+ABLATION_DATASET_AVAILABLE = False
+AblationDataset = None
+try:
+    from ablation_train_utils import AblationDataset
+    ABLATION_DATASET_AVAILABLE = True
+    logger.info("✓ AblationDataset 导入成功")
+except Exception as e:
+    logger.warning(f"✗ AblationDataset 导入失败，将使用备用归一化方式: {e}")
 
 # Import MRGTraj
 MRGRAJ_AVAILABLE = False
@@ -181,10 +194,21 @@ def load_32d_features_with_stats(features_dir, num_agents, use_subset=False):
             features = data['features']
             feature_means = data.get('feature_means', None)
             feature_stds = data.get('feature_stds', None)
+            if feature_means is None and 'means' in data:
+                feature_means = data.get('means', None)
+            if feature_stds is None and 'stds' in data:
+                feature_stds = data.get('stds', None)
             if feature_means is not None:
                 feature_means = feature_means.astype(np.float32)
             if feature_stds is not None:
                 feature_stds = feature_stds.astype(np.float32)
+            if feature_means is None or feature_stds is None:
+                feature_dim = features.shape[-1]
+                flat_features = features.reshape(-1, feature_dim).astype(np.float32)
+                feature_means = np.mean(flat_features, axis=0).astype(np.float32)
+                feature_stds = np.std(flat_features, axis=0).astype(np.float32)
+                feature_stds = np.where(feature_stds < 1e-8, 1.0, feature_stds)
+                logger.info("32D feature stats missing in file, fallback to computed means/stds")
             return features.astype(np.float32), feature_means, feature_stds
 
     logger.warning(f"特征文件未找到，候选位置: {candidates}")
@@ -521,9 +545,10 @@ def predict_mrgraj(model, x_sample, device, use_physical_constraints=True, pc_dt
     if distance_from_last > 1.0:
         pred_delta = np.diff(np.vstack([last_obs, pred_output]), axis=0)
         if use_physical_constraints:
+            pred_delta_cum = np.cumsum(pred_delta, axis=0)
             pred_abs = apply_physical_constraints(
                 x_sample,
-                pred_delta,
+                pred_delta_cum,
                 dt=pc_dt,
                 smoothing_weight=pc_smoothing_weight,
                 constraint_relaxation=pc_constraint_relaxation
@@ -533,9 +558,10 @@ def predict_mrgraj(model, x_sample, device, use_physical_constraints=True, pc_dt
     else:
         if use_physical_constraints:
             pred_delta = np.diff(np.vstack([last_obs, pred_output]), axis=0)
+            pred_delta_cum = np.cumsum(pred_delta, axis=0)
             pred_abs = apply_physical_constraints(
                 x_sample,
-                pred_delta,
+                pred_delta_cum,
                 dt=pc_dt,
                 smoothing_weight=pc_smoothing_weight,
                 constraint_relaxation=pc_constraint_relaxation
@@ -861,7 +887,7 @@ def main():
     lbebm_model.eval()
     logger.info("✓ LBEBM3D 模型加载成功")
 
-    logger.info(f"加载 Exp5 模型: {args.exp5_dir}")
+    logger.info(f"加载 Exp5 模型 (消融实验一致方式): {args.exp5_dir}")
     exp5_dir = Path(args.exp5_dir)
     config_path = exp5_dir / f"config_agents_{args.agents}_exp5_full.json"
     stats_path = exp5_dir / f"stats_agents_{args.agents}_exp5_full.npz"
@@ -875,10 +901,11 @@ def main():
     exp5_output_std = stats['output_std']
 
     exp5_ckpt = torch.load(model_path, map_location='cpu', weights_only=False)
+    # 与消融实验 AblationModelEnsemble.load_experiment(5,...) 完全一致：input_size 固定为 32
     exp5_model = DynamicsAwareSwarmGRUModel_with_GNN(
-        input_size=config.get('input_features', 32),
-        hidden_size=config.get('hidden_size', 128),
-        num_layers=config.get('num_layers', 3),
+        input_size=32,
+        hidden_size=config['hidden_size'],
+        num_layers=config['num_layers'],
         output_size=3,
         dropout=0.3,
         use_attention=True,
@@ -918,13 +945,25 @@ def main():
         sys.exit(1)
     logger.info("✓ SwarmGRU v3 模型加载成功")
 
-    logger.info("加载 32D 特征...")
-    features_all, feature_means, feature_stds = load_32d_features_with_stats(
+    logger.info("加载 32D 特征 (消融实验一致方式)...")
+    # 只取原始特征数组，忽略文件中可能存储的统计量键
+    # 原因：ablation_train_utils.load_ablation_data 始终从全量数据重新计算统计量
+    features_all_raw, _, _ = load_32d_features_with_stats(
         args.features_32d_dir, args.agents, args.use_subset
     )
-    if features_all is None:
+    if features_all_raw is None:
         logger.warning("⚠ 32D 特征加载失败，Exp5 可能无法运行")
-    logger.info(f"特征形状: {features_all.shape if features_all is not None else 'None'}")
+        features_all = None
+        feature_means = None
+        feature_stds = None
+    else:
+        features_all = features_all_raw
+        # 与 load_ablation_data 完全一致：从全量特征重新计算 mean/std
+        feat_dim = features_all_raw.shape[-1]
+        feature_means = np.mean(features_all_raw.reshape(-1, feat_dim), axis=0).astype(np.float32)
+        feature_stds = np.std(features_all_raw.reshape(-1, feat_dim), axis=0).astype(np.float32)
+        feature_stds = np.where(feature_stds < 1e-8, 1.0, feature_stds)
+        logger.info(f"特征形状: {features_all_raw.shape} (统计量已从全量数据重新计算)")
 
     total_samples = min(len(x_all), len(features_all) if features_all is not None else len(x_all))
     if features_all is not None and len(x_all) != len(features_all):
@@ -932,6 +971,27 @@ def main():
         x_all = x_all[:total_samples]
         y_all = y_all[:total_samples]
         features_all = features_all[:total_samples]
+
+    # 创建与消融实验训练完全一致的 AblationDataset，供 EXP5 推理使用
+    ablation_dataset = None
+    if features_all is not None and ABLATION_DATASET_AVAILABLE:
+        # 统计量计算方式与 load_ablation_data 完全一致
+        input_mean_ds = np.mean(x_all.reshape(-1, 3), axis=0).astype(np.float32)
+        input_std_ds = np.std(x_all.reshape(-1, 3), axis=0).astype(np.float32)
+        input_std_ds = np.where(input_std_ds < 1e-8, 1.0, input_std_ds)
+        y_delta_ds = y_all - x_all[:, -1:, :, :]
+        output_mean_ds = np.mean(y_delta_ds.reshape(-1, 3), axis=0).astype(np.float32)
+        output_std_ds = np.std(y_delta_ds.reshape(-1, 3), axis=0).astype(np.float32)
+        output_std_ds = np.where(output_std_ds < 1e-8, 1.0, output_std_ds)
+        ablation_dataset = AblationDataset(
+            x_all, y_all,
+            feature_dim=32, normalize=True, dt=0.1,
+            input_mean=input_mean_ds, input_std=input_std_ds,
+            output_mean=output_mean_ds, output_std=output_std_ds,
+            features_precomputed=features_all,
+            feature_mean=feature_means, feature_std=feature_stds
+        )
+        logger.info(f"✓ AblationDataset 创建成功 ({len(ablation_dataset)} 样本)")
 
     np.random.seed(args.seed)
     if args.sample_indices:
